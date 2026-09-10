@@ -1,0 +1,229 @@
+
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+
+body {
+    font-size: 14px;
+    font-family: monospace;
+    line-height: 1.3em;
+}
+
+.main {
+    width: 60%;
+    min-width: 600px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.horizontal-rule {
+    border-top: dotted 1px;
+    width: 100%;
+    margin: 15px 0 25px;
+}
+
+h1, h2, h3 {
+    text-transform: uppercase;
+}
+h1, h2 {
+    font-family: 'VT323', monospace;
+}
+h1 {
+    font-size: 2em;
+    margin: 20px 0 5px 0;
+}
+.schedule h3 {
+    display: inline;
+}
+h4 {
+    margin-bottom: 7px;
+}
+h5 {
+    font-weight: normal;
+    font-size: 1em;
+    margin-bottom: 3px;
+}
+
+ul, ol {
+    padding-inline-start: 0;
+    list-style: none;
+    text-indent: -20px;
+    margin-left: 25px;
+}
+ul p, ol p, ul pre, ol pre {
+    text-indent: 0;
+}
+ul.reading-list li::before {
+    content: "> ";
+}
+ul.sublist li::before {
+    content: "– ";
+}
+
+ul.resource-list li {
+    margin: 20px 0;
+}
+ul.reading-list {
+    margin-bottom: 0;
+}
+ul.reading-list li {
+    margin: 0;
+}
+ul.sublist li {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+}
+ol.tutorial-list {
+    list-style: decimal-leading-zero;
+    text-indent: 0;
+}
+ol.tutorial-list li {
+    margin: 0 0 20px 0;
+}
+ol.table-of-contents {
+    list-style: decimal-leading-zero;
+    padding-inline-start: 20px;
+    text-indent: 0;
+}
+ol.table-of-contents li {
+    margin: 0 0 4px 0;
+}
+
+ol.table-of-contents ol {
+    list-style: lower-alpha;
+    padding-inline-start: 0px;
+    text-indent: 5px;
+}
+
+
+div.image {
+    width: 600px;
+    margin: 0 auto 20px;
+    text-align: center;
+}
+div.image img {
+    width: 600px;
+    border: solid 1px #000;
+}
+
+.week {
+    margin: 0 0 25px 50px;
+}
+.week h3 {
+    margin-left: -50px;
+}
+
+.class-artifacts {
+    margin-top: -5px;
+}
+
+.indent {
+    margin: -10px 0 3px 30px;
+}
+
+
+code, pre {
+    background-color: #ccf;
+}
+pre {
+    margin: 10px;
+    padding: 10px;
+
+}
+code.cli, span.cli, pre.cli {
+    background-color: #000;
+    color: #fff;
+}
+code.cli, span.cli {
+    padding: 1px 3px;
+}
+pre.cli {
+    border-radius: 5px;
+    border-top: solid 5px #999;
+}
+
+.new-changed {
+    margin-top: 8px;
+    text-align:right;
+}
+.new {
+    color: #33f;
+    border-bottom: 3px dotted;
+}
+.changed {
+    color: #f50;
+    border-bottom: 1px dashed;
+}
+.highlight {
+    background-color: #ff6;
+}
+
+.challenge {
+    padding-left: 25px;
+    border: solid 1px #ccf;
+    margin: 0 0 15px;
+    padding: 0 36px 5px;
+    text-align: justify;
+    border-radius: 7px;
+}
+
+.answer {
+    color: #fff; background-color: #fff;
+}
+.answer::-moz-selection { /* Code for Firefox */ 
+    color: #000; 
+    background-color: #ccf;
+}
+.answer::selection {
+    color: #000;
+    background-color: #ccf;
+}
+
+.figure {
+    margin-bottom: -12px;
+    font-style: oblique;
+    font-size: .9em;
+}
+
+blockquote {
+    padding-left: 15px;
+    border-left: solid 5px lightgray;
+}
+
+
+/* jagged border thanks to this: https://medium.com/coding-design/saw-tooth-banners-with-css-95c31e91c196 */
+pre.snippet {
+     background-image:
+        /* Top jagged */
+        linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%),
+        linear-gradient(-135deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%),
+        /* Bottom jagged */
+        linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%),
+        linear-gradient(-45deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%),
+        /* Top and bottom fade  */
+        linear-gradient(to bottom, rgba(204,204,255,0.5) 0%, rgba(204,204,255,0.5) 100%),
+        linear-gradient(to top, rgba(204,204,255,0.5) 0%, rgba(204,204,255,0.5) 100%);
+    background-position:
+        /* Top jagged */
+        top center, top center,
+        /* Bottom jagged */
+        bottom center, bottom center,
+        /* Top fade */
+        top center,
+        /* Bottom fade */
+        bottom center;
+    background-size:
+        /* Top + bottom jagged */
+        0.75rem 0.75rem, 0.75rem 0.75rem, 0.75rem 0.75rem, 0.75rem 0.75rem,
+        /* Top + bottom fade */
+        100% 1rem, 100% 1rem;
+    background-repeat: repeat-x;
+}
+
+code.css, pre.css, span.css {
+    background-color: #ffbd6b;
+    border-radius: 10px;
+}
+
+span.selected {
+    border: solid 1px black;
+}
