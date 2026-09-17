@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>Radical Software, Spring 2026: Project 1, Introduction</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="js/links.js"></script>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <p class="nav">
+      <a href="index.html">Home</a> | <a href="schedule.html">Schedule &amp; Readings</a> | <a href="resources.html">Links &amp; Resources</a>
+    </p>
+    
+    <p style="float: right;">
+      [ Links open in: <span id="window-same" class="selected">same window</span> | <span id="window-new">new window</span> ]
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h1>Radical Software</h1>
+    <p>
+      MCST 294-02 / COMP 194-03, Fall 2026<br/>
+      Rory Solomon <br />
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h2>Project 1, Introduction: Browser extensions and HTTP</h2>
+
+
+    <p>
+      For this project, you are going to build a <strong>browser
+      extension</strong>. Browser extensions are bits of code that
+      you can install within a <strong>web browser</strong> that
+      modify the functionality of the browser in some way.
+    </p>
+
+    <p>
+      For some reason, browser extensions are often depicted as puzzle
+      pieces. I'm not sure I'd agree that this is necessarily
+      the <em>most</em> apt iconography, but I suppose the symbol is
+      meant to signify some kind of add-in object that plugs in to a
+      larger whole.
+    </p>
+
+    <div class="image">
+      <img src="images/project1-0 - browser-extensions.png" />
+      <em style="font-style: serif;">Browser extention iconography.</em>
+    </div>
+
+    <p>
+      In demonstrating how to get started building your own browser
+      extension, I'll have to take a step back at a few points today
+      to explain some of the background concepts involved in this
+      work, including the communication protocol of the web, web
+      browsers, and HTML. I've created a table of contents to
+      help you navigate this tutorial. (Click on any link to jump down
+      to that topic.)
+
+      <h3 id="table-of-contents">Table of contents</h3>
+      <ol class="table-of-contents" >
+	<li>
+	  <a href="#overview">Browser extensions overview</a>
+	</li>
+	<li>
+	  <a href="#functionality">Browser extension functionality</a>
+	</li>
+	<li>
+	  <a href="#http">Hypertext Transfer Protcol (HTTP)</a>
+	</li>
+      </ol>
+    </p>
+
+    <h3 id="overview">01. Browser extensions overview</a></h3>
+
+    <p>
+      Browser extensions can be developed for all major web browsers
+      today: Chrome, Firefox, Safari, Opera, Microsoft Edge, and
+      others. Each browser has it's own rules and format for how to
+      develop &amp; distribute extensions for it. For this project,
+      we'll be making browser extensions for the Chrome
+      browser. Fortunately, Chrome and Firefox mostly comply to the
+      same rules about how their extensions are structured, so if you
+      learn how to develop extensions for Chrome, you should later be
+      able to fairly easily adapt them to Firefox.
+    </p>
+    <p>
+      The Chrome browser is based on a thing called Chromium, which is
+      also used by Opera and Microsoft Edge, so I believe that Chrome
+      extensions should be easy to adapt to those browsers as well
+      &mdash; although I haven't tried.
+    </p>
+    <p>
+      Safari is a bit of an outlier here, and I believe that
+      developing extensions for that browser platform would be a bit
+      of a different process than what we'll be learning with this
+      project.
+    </p>
+
+    <h3 id="functionality">02. Browser extension functionality</h3>
+    
+    <p>
+      Browser extensions can interact with web pages that the user of
+      the browser is navigating. They can also do other things like
+      view or manipulate the user's bookmarks, their downloads
+      directory, their browsing history, or
+      their <strong>cookies</strong>. A <strong>cookie</strong> is a
+      term for small bits of data that websites save locally within
+      your browser, so that they can remember you when you return to
+      the website later. As you problably know these are often used
+      for tracking in ways that many people now see as invasive data
+      surveillance, used for supporting ad recommendations and other
+      things. Browser extensions can also interact with browser
+      request and responses, which I'll explain below.
+    </p>
+
+    <h3 id="http">03. Hypertext Transfer Protcol (HTTP)</h3>
+
+    <p>
+      To better understand what <strong>browser extensions</strong>
+      do, let's take a step back and think about <strong>hypertext
+      transfer protcol</strong> (or, <strong>HTTP</strong>) the
+      protocol that dictates how all data on the worldwide web flows.
+    </p>
+
+    <div class="image">
+      <img src="images/project1-0 - HTTP 1.png" />
+    </div>
+    
+    <p>
+      Let's say you have a web browser open on your computer and you
+      want to visit a website, let's
+      say <a href="http://nytimes.com">nytimes.com</a>. You would type
+      the <strong>URL</strong> (or <strong>web address</strong>) for
+      that site into your browser's <strong>address bar</strong>. That
+      will cause your browser to look up the <strong>domain
+      name</strong> (the human-readable website name) to determine the
+      <strong>IP address</strong> for the server hosting this website,
+      its identifier on the internet.
+    </p>
+
+    <p>
+      A <strong>server</strong> is just like your computer, except
+      that it most likely sits in a data center somewhere, is always
+      on, always connected to the internet, and does not have a
+      monitor or screen but instead sends information over networks.
+    </p>
+
+    <p>
+      Your browser would then make a <strong>request</strong>, asking
+      that <strong>server</strong> for the specific <strong>web
+      page</strong> indicated by
+      the <strong>URL</strong>. That <strong>request</strong> would be
+      routed through the internet to the <strong>web server</strong>,
+      which would then process your generate the desired web page
+      (perhaps by running some code, like Python or another
+      programming language) and returning a <strong>web page</strong>
+      in the form of <strong>HTML</strong> text. This is called
+      the <strong>response</strong>.
+    </p>
+
+    <p>
+      Your browser would then receive the <strong>response</strong>,
+      parse the <strong>HTML</strong>, and display the web page for
+      you.
+    </p>
+
+    <div class="image">
+      <img src="images/project1-0 - HTTP 2 - highlighted.png" />
+    </div>
+    
+    <p>
+      This entire process, comprising all the <span style="color:
+      blue;">blue elements</span> above, is what is specified
+      by <strong>HTTP</strong>.
+    </p>
+    <p>
+      I lay out this process so that we can have some precise
+      vocabulary to talk about what browser extensions can do. A
+      browser extension is like the <span style="color: firebrick;">red
+      component</span> below. It is code that is run by your web
+      browser, and that can intervene in any part of this process
+      of <strong>URL</strong>
+      specification, <strong>request</strong>, <strong>response</strong>,
+      or the <strong>parsing</strong> or display of <strong>HTML</strong>.
+    </p>
+
+    <div class="image">
+      <img src="images/project1-0 - HTTP 3 - with extension.png" />
+    </div>
+    
+
+
+    
+    
+    <div class="horizontal-rule"></div>
+    <script type="text/JavaScript">
+      datUpdated = new Date(document.lastModified) ;
+      document.write("Last Updated: " + datUpdated);
+    </script>
+
+    </div>
+
+</body>
+
+</html>
+
