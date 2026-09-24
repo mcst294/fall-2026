@@ -1,0 +1,1714 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>Radical Software, Fall 2026: Project 1, Tutorial 1</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="js/links.js"></script>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <p class="nav">
+      <a href="index.html">Home</a> | <a href="schedule.html">Schedule &amp; Readings</a> | <a href="resources.html">Links &amp; Resources</a>
+    </p>
+
+    <p style="float: right;">
+      [ Links open in: <span id="window-same" class="selected">same window</span> | <span id="window-new">new window</span> ]
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h1>Radical Software</h1>
+    <p>
+      MCST 294-02 / COMP 194-03, Fall 2026<br/>
+      Rory Solomon <br />
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h2>Project 1, Tutorial 1: Getting started with browser extensions</h2>
+
+
+    <p>
+      <a href="project1-intro.html">Last week</a> we covered some
+      introductory ideas about what browser extensions are, what their
+      iconography might signify, and some basic principles of HTTP,
+      hypertext transfer protocol: the technical rules for exchanging
+      data that govern how the web operates.
+    </p>
+
+    <p>
+      Today we will cover how to get started developing browser
+      extensions, including the tools that I recommend you to use in
+      this process.
+    </p>
+
+    <div style="width: 600px; margin: 0 auto 20px; text-align: center;">
+      <img src="images/project1-1 - browser technology-stack.png" style="width: 600px; border: solid 1px #000;"/>
+      <em style="font-style: serif;">A web browser technology stack.
+      No need to scrutinize this too closely. I present it here as an
+      aesthetic object rather than a technical one. But if
+      you <u>are</u> curious about what this might signify about our
+      work on Project 1, I would direct your attention to the layered
+      boxes on the left that go from internet, to HTTP, to JavaScript,
+      to events, to user. You
+      can <a href="https://hsivonen.fi/web-stack/">read more</a> about
+      this particular diagram and what its creator was attempting to
+      do.</em>
+    </div>
+
+
+    <h3 id="table-of-contents">Table of contents</h3>
+    <ol class="table-of-contents">
+      <li>
+	<a href="#installing">Installing browser extensions</a>
+      </li>
+      <ol>
+	<li>
+	  <a href="#start-lab-notebook">Start your first lab notebook entry</a>
+	</li>
+	<li>
+	  <a href="#developer-mode">Developer mode</a>
+	</li>
+      </ol>
+      <li>
+	<a href="#start">Starting the project</a>
+      </li>
+      <ol>
+	<li>
+	  <a href="#folders">A simple folder structure</a>
+	</li>
+	<li>
+	  <a href="#getting-source">Getting the source code</a>
+	</li>
+	<li>
+	  <a href="#loading-first">Loading your first extension into your browser</a>
+	</li>
+      </ol>
+      <li>
+	<a href="#developing">Developing an extension</a>
+      </li>
+      <ol>
+	<li>
+	  <a href="#text-editor">Working with a text editor: Visual Studio Code</a>
+	</li>
+	<li>
+	  <a href="#manifest">The main component of a Chrome extension: <code class="cli">manifest.json</code></a>
+	</li>
+	<li>
+	  <a href="#modify-reload">Modifying &amp; reloading your extension</a>
+	</li>
+	<li>
+	  <a href="#content-scripts">Working with <code class="cli">content_scripts</code></a>
+	</li>
+      </ol>
+      <li>
+	<a href="#detour-html">Detour: HTML overview</a>
+      </li>
+      <ol>
+	<li>
+	  <a href="#open-close-brackets-tags">HTML syntax: open and close brackets and tags</a>
+	</li>
+	<li>
+	  <a href="#structure-vs-content">Structure and content, versus appearance</a>
+	</li>
+	<li>
+	  <a href="#html-structure-example">Example of HTML as structure</a>
+	</li>
+	<li>
+	  <a href="#browser-inspect">Examining a web page with the inspect tool</a>
+	</li>
+      </ol>
+      <li>
+	<a href="#first-technique">Our first browser extension technique: modifying CSS properties</a>
+      </li>
+      <ol>
+	<li>
+	  <a href="#while-loop">Two loop styles: <code>for</code> and <code>while</code></a>
+	</li>
+	<li>
+	  <a href="#more-advanced-css-randomness">More advanced CSS techniques with randomness</a>
+	</li>
+      </ol>
+      <li>
+	<a href="#debugging">Debugging techniques</a>
+      </li>
+      	<ol>
+	  <li>
+	    <a href="#debugging-extension-manager">Using the extension manager (load-time errors)</a>
+	  </li>
+	  <li>
+	    <a href="#debugging-console">Using the console (run-time errors)</a>
+	  </li>
+	</ol>
+      <li>
+	<a href="#concluding-and-lab-notebook">Conclusions &amp; lab notebook entries</a>
+      </li>
+    </ol> <!-- id="table-of-contents -->
+
+
+
+
+    
+    <h3 id="installing">01. Installing browser extensions</h3>
+    
+    <p>
+      Each browser has its own way of adding extensions to it. For
+      Firefox, you would click Tools &gt; Add-ons, which would allow
+      you to search for any extentions available online and install
+      them within your browser.
+    </p>
+
+    <div class="image">
+      <img src="images/project1-1 - firefox add-ons.png" style="width: 600px; border: solid 1px #000;"/>
+      <em>Adding and managing extensions in Firefox, which are
+	referred to as "Add-ons" on this platform.</em>
+    </div>
+
+    <p>
+      As I mentioned, we'll be developing extensions for the Chrome
+      browser for this project. If you do not already have Chrome
+      installed on your computer, please
+      visit <a href="https://www.google.com/chrome/">google.com/chrome</a>
+      and install it now.
+    </p>
+
+    <p>
+      <em>A cautionary note.</em> Chrome is one of the poorer browsers
+      in terms of how much of your data that it collects, stores,
+      shares, and sells. But it is also probably the most widely-used
+      browser at this point, so I feel that developing extensions for
+      this platform will be the most practical option for you in terms
+      of making something that many people could potentially use. The
+      Chrome extension development process is also very well-developed
+      &mdash; probably at least in part because it is so widely
+      used. If you are concerned about such things, you might consider
+      removing Chrome from your computer after this project, and
+      adapting your extension to Firefox to continue work on
+      it. Extended discussion about various browsers and their pros
+      and cons is available here: <br/>
+
+      <a href="https://www.broadbandsearch.net/blog/best-browsers-for-privacy/">&quot;Best
+      and Worst Web Browsers for Privacy in
+      2026&quot;</a>, <em>Broadband Search</em>, July 15, 2026
+    </p>
+
+    <p>
+      Once you have Chrome installed, go to the
+      Chrome <strong>extensions manager</strong>: click the menu items
+      Window &gt; Extensions to access the extensions currently
+      installed in your browser. You can also
+      type <code>chrome://extensions</code> in your <strong>address
+      bar</strong> (also known as a <strong>location bar</strong>).
+    </p>
+
+    <div class="image">
+      <a href="images/project1-1 - Chrome extensions.png">
+	<img src="images/project1-1 - Chrome extensions.png" style="width: 600px; border: solid 1px #000;"/>
+      </a>
+      <em>Adding and managing extensions in Chrome. (Click image to enlarge.)</em>
+    </div>
+    
+    <p>
+      Note that the search box pictured above is only for searching
+      through extensions that you <em>already</em> have installed. If
+      you&apos;d like to look for <em>new</em> extensions to install,
+      you can click the menu icon in the top-left, and then click
+      "Open Chrome Web Store."
+    </p>
+
+    <div style="width: 400px; margin: 0 auto; text-align: center;">
+      <img src="images/project1-1 - chrome store.png" style="width: 400px; border: solid 1px #000;"/>
+      <em>Accessing the Chrome Web Store to search for new extensions.</em>
+    </div>
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="start-lab-notebook">01.a. Start your first lab notebook entry</h4>
+
+    <p>
+      As outlined in the syllabus, for each technical tutorial, you
+      will be expected to make notes in a lab notebook entry that you
+      will then submit with the project.
+    </p>
+    <p>
+      To get started, go to the <a href="resources.html">resources
+      page</a>, click "Lab notebook template", and then either make a
+      copy, or download it to your computer in an edittable format
+      (Microsoft Word, <code>.odt</code>, <code>.txt</code>, or
+      Markdown).
+    </p>
+    <p>
+      Use this to note down a range of things: interesting
+      observations about the project and process, ideas for your
+      project, other things you may want to explore later, or bugs you
+      may have encountered. I think the most important use of this
+      will be to note down any bugs or stumbling blocks <em>and</em> a
+      few notes about how you resolved them. This will be an
+      invaluable resource for you (<em>and others!</em>) as you continue
+      work in this area, for this project or for others in the future.
+    </p>
+    <p>
+      At various points thoughtout the tutorial I may pose some
+      questions or make some suggestions for things to record in your
+      notebook. I will try to remind you to start a new lab notebook
+      for each tutorial, but from now on it will be your
+      responsibility to remember to do so. They will be submitted and
+      graded with your code when you complete this project.
+    </p>
+
+    <div class="image">
+      <a href="images/project1-1 - lab notebook.png">
+	<img src="images/project1-1 - lab notebook.png" />
+      </a>
+      Make a copy or download an edittable version of the lab notebook
+      template.
+      <em>(Click to enlarge.)</em>
+    </div>
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>    
+    <h4 id="developer-mode">01.b. Developer mode</h4>
+    
+    <p>
+      The Chrome Web Store is only for accessing extensions
+      that <em>other</em> people have developed and published. How can
+      we access our <em>own</em> extensions that we'll be developing
+      for this project? In the top-right corner, flip the toggle that
+      says "<strong>Developer mode</strong>". This will enable some
+      features that allow you to develop and test your own custom
+      extension code.
+    </p>
+    <p>
+      <em>Please note</em> that I've found that this can slow down my
+      browser somewhat, so you may want to turn this option off when
+      you&apos;re not working on this project. Don&apos;t worry,
+      turning off <strong>developer mode</strong> will not delete or
+      uninstall any extensions that you're working on.
+    </p>
+
+    <p>
+      <strong>Developer mode</strong> displays some additional
+      debugging information about any extensions you already have
+      installed, and it offers you some new buttons at the top-left,
+      including "Load unpacked". This is the functionality that we'll
+      use to install extensions once we have them developed. So let's
+      get started with that ...
+    </p>
+
+
+    <blockquote>
+      <p>
+	<strong>For your lab notebook.</strong> Along the way in our
+	technical tutorials, I will occasionally offer some questions
+	or comments about things for you to remark on in your lab
+	notebook. I will indicate these with a note like this, labeled
+	"For your lab notebook". 
+      </p>
+
+      <p>
+	As your first comment, add some thoughts / reflections about
+	the above in regards to the browser extension ecosystem, the
+	web browser stack, HTTP, privacy concerns, and developer mode.
+      </p>
+    </blockquote>
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="start">02. Starting the project</h3>
+
+
+    <h4 id="folders">02.a. A simple folder structure</h4>
+
+    <p>
+      It is essential this semester that you create a simple scheme
+      for organizing your work into folders and subfolders by project
+      and tutorial. I know many people these days seem to resist this
+      kind of file organization technique and prefer to work with lots
+      of files in one folder, using search for everything. That is
+      fine, and I respect everyone's different work patterns and the
+      ways we all prefer to organize our thinking. But when working on
+      coding projects, folders and subfolders are a required
+      organizational technique.
+    </p>
+    <p>
+      As we&apos;ve already discussed (and will continue to return to
+      this semester), even though we often see software &amp; digital
+      networks as powerful tools for various kind of expresssion and
+      activism, the digital remains a highly hierarchical realm, with
+      layers of permissions and organizational containment. Examining
+      this (and perhaps struggling with it) will be a recurring theme
+      this term.
+    </p>
+
+    <p>
+      Computer programs, including ones we will write, often reference
+      other digital objects like images, multimedia, data files, or
+      other programs, and folders are the default way of grouping
+      these resources together. And when it comes time to bundle up
+      your work to share with others, folders of code will typically
+      be used to distribute collections of functionality as a library,
+      app, or full application.
+    </p>
+    <p>
+      Simply putting all your work into one large folder and searching
+      for things may work for you, but it will not work for the tools
+      we'll be using.
+    </p>
+
+    <div class="image">
+      <img src="images/project1-1 - messy desktop.png" style="width: 600px; border: solid 1px #000;"/>
+    </div>
+
+    <p>
+      So, for this class I would like to require that you create a
+      simple folder structure to organize your work.
+    </p>
+    <p>
+      Start by creating a folder for our class for the semester. (I
+      recommend you put it in your Documents folder or a similar
+      location on your computer, but that is up to you. Within that, I
+      also recommend that you create a folder for coding, and a folder
+      for the other work you'll be doing this semester, but that is
+      also up to you.) What is essential is that within your class
+      folder, you create subfolders for each project, and within that,
+      subfolders for each technical tutorial.
+    </p>
+    <p>
+      Open Finder (or Explorer), navigate to
+      your <code class="cli">Radical Software</code> class folder, and
+      create a new folder called <code class="cli">Project
+      1</code>. Your class folder should now look like this:
+    </p>
+
+    <div class="image">
+      <img src="images/project1-1 - Folders.png" style="width: 600px; border: solid 1px #000;"/>
+    </div>
+
+
+
+
+
+
+
+    
+    <h4 id="#getting-source">02.b. Getting the source code</h4>
+    <p>
+      Now, visit the GitHub page for our class this
+      semester: <a href="https://github.com/Radical-Software-Fall-2026">github.com/Radical-Software-Fall-2026</a>
+      and click on the "project-1" repository. Later on we'll talk
+      about how to make use of more git and GitHub functionality, but
+      for now, use this to simply download some code to get started
+      with this project. Click on the green &quot;Code&quot; drop down
+      and click &quot;Download zip&quot;. That should save
+      a <code class="cli">.zip</code> file to your Downloads
+      folder. Move that file into your <code class="cli">Project
+      1</code> folder, and double-click it to expand its contents. You
+      should now also have a subfolder
+      called <code class="cli">project-1-main</code> in this folder.
+    </p>
+
+
+
+
+
+    
+    <h4 id="loading-first">02.c. Loading your first extension into your browser</h4>
+
+    <p>
+      Back in your Chrome <strong>extensions manager</strong>, click
+      "Load unpacked", navigate to your "Project 1" folder, click
+      "project-1" and click the "Select" button. Now, under &quot;All
+      Extensions&quot;, you should now see something labeled &quot;PROJECT
+      NAME 0.1&quot;. Congratulations, you've just loaded your first
+      custom browser extenion.
+    </p>
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3	id="developing">03. Developing an extension</h3>
+
+    <p>
+      Now let&apos;s see how to start working on that ...
+    </p>
+
+    <h4 id="text-editor">03.a. Working with a text editor: Visual Studio Code</h4>
+
+    <p>
+      To create and develop custom software, you need a text editor to
+      write and edit your computer program files: a program that lets
+      you type and save text as plain text, without any fancy
+      formatting like Microsoft Word offers.
+    </p>
+
+    <p>
+      The text editor that we will use this semester is a very useful,
+      open source tool called VS Code (which stands for Visual Studio
+      Code), which you can get here:<br/>
+      <a href="https://code.visualstudio.com/">code.visualstudio.com</a>
+    </p>
+    <p>
+      The fact that it is <strong>open source</strong> means
+      that the computer program files and algorithms of this tool are
+      freely, publicly available, not proprietary or hidden. That
+      means you can view the source code for this tool! In fact, the
+      full source code is
+      <a href="https://github.com/microsoft/vscode">posted here on
+      GitHub</a>. Feel free to have a look. This also means that if
+      you wanted to, you could modify VS Code to change its behavior
+      in some way, then rebuild it and run your own customized
+      version. (A very advanced exercise, but possible!) 
+    </p>
+    
+
+    <p>
+      If you have not yet installed VS Code, download and install
+      it. VS Code is free, freely available, trustworthy software that
+      is easy to download and install.
+    </p>
+
+    <p>
+      After clicking "Download" on the above site, you should have a
+      new file in your Downloads folder called something
+      like <code class="cli">VSCode-something.dmg</code>. Double-click
+      this file, which should open a window that will allow you to
+      drag the VS Code application into wherever you keep
+      applications on your computer. On Mac, this is typically the
+      Applications folder. Like so:
+      <div class="image">
+	<a href="images/project1-1 - vscode drag.png">
+	  <img src="images/project1-1 - vscode drag.png" style="width: 400px; border: solid 1px #000;"/></a>
+      </div>
+    </p>
+	
+    <p>
+      <blockquote>
+	(Sidenote: So that you don't get confused at some point in the
+	future, I want to point out that Visual Studio <em>Code</em>
+	is one product within Microsoft's wider <em>Visual Studio</em>
+	brand and product line. The product known as "Visual Studio"
+	has been around for over 20 years, was originally created for
+	Windows desktop application development, and has since
+	expanded to support other types of coding but mainly focused
+	around larger, server-side, and desktop projects. Visual
+	Studio &quot;Code&quot; is a newer, open source program
+	designed for coding in many programming languages and is more
+	suitable to smaller projects, even though it can also be used
+	for larger ones as well.)
+
+	<p>
+	  <strong>For your lab notebook.</strong> Perhaps offer some
+	  speculation on this new buzzword &quot;code&quot; and what
+	  it means that Microsoft purchased this open source text
+	  editor and folded it into its &quot;Visual Studio&quot;
+	  product line. Is &quot;Code&quot; somehow an alternative to
+	  other types of software, like what we might see elsewhere
+	  referred to as
+	  &quot;<a href="https://en.wikipedia.org/wiki/Enterprise_software">Enterprise</a>&quot;?
+	</p>
+      </blockquote>
+    </p>
+    
+    <p>
+      Next, find the VS Code application and double-click to open
+      it. You should see something like this.
+    </p>
+    <p>
+      You can skip signing in with GitHub for now.
+    </p>
+    <p>
+      I would also suggest that you close the "Chat" panel on the
+      right. This enables some AI-related functionality which I
+      realize you may wish to experiment with later in the semester,
+      but for now I would ask you to ignore.
+    </p>
+    <div class="image">
+      <img src="images/project1-1 - vscode hide AI.png" />
+    </div>
+    <p>
+      You can also ignore this &quot;Getting Started&quot; screen for
+      now, so click the small "X" on its tab to close it. (You can
+      easily get it back later if you'd like to see what it says by
+      clicking "Help" in the top-level menu and then clicking
+      "Welcome").
+    </p>
+    
+    <p>
+      If you see the word "Extensions" mentioned here, know that it
+      has nothing to do with browser extensions and instead is a
+      reference to extensions that people have created for the text
+      editor itself. You can click there to explore if you'd like, but
+      we can ignore it for today.
+      <div class="image">
+	<a href="images/project1-1 - vscode extensions.png">
+	  <img src="images/project1-1 - vscode extensions.png" style="width: 600px; border: solid 1px #000;"/>
+	</a>
+	<em>(Click to enlarge.)</em>
+      </div>
+    </p>
+
+	
+
+    <p>
+      Now, drag your "project-1-main" folder into the VS Code
+      window:
+      <div class="image">
+	<img src="images/project1-1 - VS Code drag folder.png" style="width: 600px; border: solid 1px #000;"/>
+      </div>
+    </p>
+
+    <p>
+      If you are prompted with this question about trust you can click
+      'Yes'. (<em>If you trust me!</em> ;) ) But in the future, you
+      should always think carefully before accepting such terms. Who
+      is this code coming from? What does it do?  Opening and running
+      arbitrary code on your system potentially gives the authors of
+      that code artibtrary permissions to access all of your files,
+      data, and control of your machine. So be careful.
+    </p>
+
+    <blockquote>
+      <strong>For your lab notebook.</strong> Consider posting some
+      comments in your notebook about this question of trust and
+      security as it relates to radical software, and in particular as
+      it relates to working as a developer within a text editor like
+      VS Code.
+    </blockquote>
+
+    <p>
+      You should now see the source code of your first browser
+      extension, with all files listed in the sidebar, like this:
+    </p>
+
+    <div class="image">
+      <img src="images/project1-1 - browser source code.png" style="width: 600px; border: solid 1px #000;"/>
+    </div>
+
+
+    <p>
+      Now let's go over these various files.
+    </p>
+
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="manifest">03.b. The main component of a Chrome
+      extension: <code class="cli">manifest.json</code></h4>
+
+
+    <p>
+      The main file for a Chrome browser extension is
+      <code class="cli">manifest.json</code>. This file is like a kind
+      of <strong>meta-data</strong> that describes the extension,
+      including its name and description, what permissions the
+      extension will be using, what code files it comprises, and what
+      other resources it will be using such as multimedia.
+    </p>
+
+    <p>
+      In any filename, the letters after the dot
+      (<code class="cli">.</code>) are called the <strong>file
+      extension</strong> and they specify what type of file it is. In
+      this case, <strong>JSON</strong> stands for <strong>JavaScript
+      Object Notation</strong>. As the name implies, JSON emerged out
+      of JavaScript &mdash; but it has now become an open standard
+      file format, meaning that it is used in many programming
+      languages and many contexts. JSON is a <strong>syntax</strong>
+      for formatting text to describe data, data structures, and other
+      code objects used in computer programs. It is meant to be
+      human-readable, but it can still be quite difficult for us to
+      parse. The syntax can be quite rigid and unforgiving, and small
+      mistakes like a comma out of place can cause an entire file to
+      be unreadable by machines.
+    </p>
+    <p>
+      JSON consists largely of <strong>key-value pairs</strong>: names
+      of properties and their values, like a dictionary of words and
+      their meanings. These are typically linked in pairs by the colon
+      character (<code class="cli">:</code>). For example, in
+      your <code class="cli">manifest.json</code> file right now you
+      should see:
+      <pre>
+"manifest_version": 3,
+"name": "PROJECT NAME",
+"description": "PROJECT DESCRIPTION",
+"version": "0.1",
+</pre>
+
+      <blockquote>
+	Throughout the semetser, I will indicate valid programming
+	code in with this fixed-width font on a light blue
+	background. Whenever you see this, it should be valid code
+	that you can copy/paste into a code file. If you have trouble
+	seeing this or if I can help make it more legible to you,
+	please let me know!
+      </blockquote>
+
+    <p>
+      This indicates 4
+      properties: <code>manifest_version</code>, <code>name</code>, <code>description</code>,
+      and <code>version</code> &mdash; and their current corresopnding
+      values.
+    </p>
+    
+    <ul style="list-style: circle; text-indent: inherit;">
+      <li>
+	<code>manifest_version</code> Refers to the version of the
+	rules determining the format of
+	this <code class="cli">manifest.json</code> file. We are
+	working with the Google Chrome extension version 3. Google
+	will occasionally release new version of the Chrome extension
+	specification, and you as an extension developer would then
+	need to update and republish your extension, or risk being
+	labeled out-of-date.
+      </li>
+	<li>
+	  <code>name</code> is the name of your extension, in double
+	  quotes <code>" "</code>.
+	</li>
+	<li>
+	  <code>description</code> is a short description of what
+	  your extension does, also in double quotes <code>" "</code>.
+	</li>
+	<li>
+	  <code>version</code> refers to the version of <em>your</em>
+	  extension that you are working on. I like to always start
+	  with 0.1. You can increment this as you'd like as you work
+	  on your project. When you submit your completed project, I'd
+	  like you to increment this to 1.0.
+	</li>
+    </ul>
+
+    <p>
+      If you'd like to see all the options
+      for <code class="cli">manifest.json</code>, you can read the
+      Chrome documentation here:
+      <a href="https://developer.chrome.com/extensions/manifest">developer.chrome.com/extensions/manifest</a>.
+      That indicates which fields (i.e. which <strong>keys</strong>)
+      are required, optional, recommended, and etc. And if you'd like
+      to think more about the various pieces of a Chrome extension,
+      you can read
+      the <a href="https://developer.chrome.com/docs/extensions">Chrome
+      extension overview</a>.
+    </p>
+    
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="modify-reload">03.c. Modifying &amp; reloading your extension</h4>
+
+    <p>
+      Let's make a change to our extension code and reload it in the
+      browser, starting with something simple.
+    </p>
+
+    <p>
+      Modify your <code class="cli">manifest.json</code> file to
+      change the name and description to whatever you'd like. Let's
+      also change the version to <code>0.2</code>. (That's
+      the <code>version</code> field,
+      not <code>manifest_version</code>.)
+    </p>
+
+    <p>
+      Now go back to your extension dashboard
+      (<code>chrome://extensions</code>), find your extension, and
+      click the reload button. 
+    </p>
+    <div class="image">
+      <img src="images/project1-1 - extension reload.png" />
+    </div>
+
+    <p>
+      You should now see the name, description, and version you just
+      entered. This process of modifying code in VS Code, saving, and
+      reloading the extension in Chrome are the steps that you will
+      use to work on this project.
+    </p>
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="content-scripts">03.d. Working with <code class="cli">content_scripts</code></h4>
+
+    <p>
+      The extension we're currently working on has all of it's code in
+      a file called <code class="cli">content.js</code>. This filename
+      is not a special keyword &mdash; I could have called
+      it <code class="cli">spaghetti.js</code> or anything I wished as
+      long as it ends with the JavaScript file
+      extension <code class="cli">.js</code> <em><u>and</u></em> we
+      tell Chrome where our code is, which is another use
+      of <code class="cli">manifest.json</code>.
+    </p>
+    
+    <p>
+      In this file, the <code>content_scripts</code> field is used to
+      indicate a code file (or files) which you want your extension to
+      run to modify the <strong>content</strong> of the current
+      webpage.
+    </p>
+    <p>
+      The value of this field is actually a list, as indicated by the
+      blue symbols below, which we call <strong>square
+      brackets</strong> <code>[ ]</code>. We refer to the left and
+      right brackets as <strong>open</strong>
+      and <strong>close</strong> <strong>square brackets</strong>,
+      they must always come in pairs, and we say that any text in
+      between them is <strong>inside</strong> the brackets.
+    </p>
+    <pre>
+  "content_scripts": <span class="new">[</span>
+    // ...
+  <span class="new">]</span>
+</pre>
+
+    <p>
+      The <code>//</code> characters indicate
+      a <strong>comment</strong>. The computer will ignore everything
+      after these symbols in a line of code.
+    </p>
+
+    <p>
+      In many programming languages like Python and
+      JavaScript, <strong>square brackets</strong> usually indicate a
+      list, and the items inside the brackets are separated by
+      commas. In <code class="cli">manifest.json</code> we write these
+      on separate lines, but often in program code you will see lists
+      used like this:
+    </p>
+    <pre>
+names = [ "Gritty", "Youppi", "Nordy" ] 
+</pre>
+
+    <p>
+      (In this short list example, all my code is on one line. In our
+      JSON file, the list is spread out over several lines. This is
+      because JSON <strong>ignores whitespace</strong>. As long as you
+      get the punctuation syntax correct, you can add spaces and line
+      breaks however you like to make your code more readable to you.)
+    </p>
+    <p>
+      In our extension, each item of the <code>content_scripts</code>
+      list is specified with the <code>{ }</code> characters, which we
+      refer to as <strong>curly braces</strong>. Like <strong>square
+      brackets</strong>, these also must always come in pairs of left
+      and right <strong>curly braces</strong> which we
+      call <strong>open</strong> and <strong>close</strong> braces,
+      and we say the text in between them is <strong>inside</strong>
+      the braces. Each pair of <strong>curly braces</strong> defines
+      one <strong>content script object</strong>.
+    </p>
+
+    <p>
+      If our extension had multiple content scripts, we would specify
+      them like this. Notice how the pairs of <strong>curly
+      braces</strong> are separate by a comma:
+    </p>
+    <pre>
+  "content_scripts": [
+    {
+      // define one content script in here
+    }<span style="color: red;">,</span>
+    {
+      // define a second content script in here
+    }
+  ]
+</pre>
+
+    <p>
+      But our script currently only has one content script. So
+      the <code>content_scripts</code> list contains one item, i.e.
+      one pair of curly braces, which defines a content script with
+      a series of <strong>key-value pairs</strong>:
+    </p>
+    <pre>
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+</pre>
+
+
+    <ul style="list-style: circle; text-indent: inherit;">
+      <li>
+	<p>
+	  <code>matches</code> specifies a
+	  URL <strong>pattern</strong>. Notice how this string of
+	  characters contains some parts of URLs
+	  like
+
+	  <code>https<span style="color: red;">://</span>www.newschool.edu<span style="color: red;">/</span>lang/code-as-a-liberal-art/</code>.
+	  
+	  The stars (<code>*</code>) in this pattern indicate that
+	  this content script should be run on <em>any</em>
+	  protocol, <em>any</em> server, and <em>any</em> pages on
+	  that server. But we could use this pattern to limit our
+	  content script to only run on certain types of web content:
+	  certain protocols, certain servers, or certain kinds of
+	  files. (Note that the value of this field is itself a list!
+	  We could specify multiple patterns for one content script.)
+	</p>
+      </li>
+      <li>
+	<p>
+	  <code>js</code> specifies the name of the Javascript files
+	  to run. This should match whatever name we have given to
+	  our <code class="cli">.js</code> file. (Note again that,
+	  like <code>matches</code>, the value of this field is also a
+	  list, meaning we could have multiple files within this one
+	  content script object.)
+	</p>
+      </li>
+      <li>
+	<p>
+	  <code>run_at</code> specifies <em>when</em> the browser will
+	  run this script. Keep in mind the various parts of the HTTP
+	  protocol that we spoke
+	  about <a href="project1-intro.html">last week</a>. Valid
+	  values for this field
+	  are: <code>document_idle</code>, <code>document_start</code>, <code>document_end</code>. Later
+	  you may want to use other values here depending on your
+	  case.
+	</p>
+      </li>
+    </ul>
+
+    <p>
+      You can read
+      the <a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">Chrome
+      documentation on <code>content_scripts</code></a> online, and
+      specifically, the values
+      for <a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/#run_time"><code>run_at</code></a>.
+    </p>
+
+    <p>
+      With all that covered, let's try to understand
+      what <code class="cli">content.js</code> is doing in the
+      extension we're working on, and what the extension actually
+      does.
+    </p>
+
+    
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="detour-html">04. Detour: HTML overview</h3>
+
+    <p>
+      Since this extension is going to modify the <em>content</em> of
+      a webpage, in order to understand how it works, you have to
+      understand a little bit about how web pages are built. What
+      follows is a brief detour offering a crash course in HTML and
+      how it is used to build webpages. If you&apos;ve done HTML &amp; CSS
+      before, hopefully this review will strengthen the fundamentals
+      of your understanding. If you've never done HTML &amp; CSS
+      before, hopefully this brief intro offers a solid foundation to
+      start with.
+    </p>
+
+    <p>
+      <strong>HTML</strong> stands for <strong>hypertext markup
+      language</strong>, and it is the language used to construct web
+      pages.
+    </p>
+
+    <div class="image" style="width: 900px;">
+      <a href="images/project1-1 - HTML view source.png">
+	<img src="images/project1-1 - HTML view source.png" style="width: 900px;"/>
+      </a>
+      <em>In any browser, you can always <strong>view source</strong>
+      to investigate the HTML that was used to construct the page you
+      are viewing. In Chrome, that is in the menu under View &gt;
+      Developer &gt; View Source. Note in this image how, even if you
+      know no HTML, you can start to see the relationship between the
+      source code and the visual presentation of this page. (Click to
+      enlarge.)</em>
+    </div>
+
+
+
+
+
+    
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="open-close-brackets-tags">04.a. HTML syntax: open and close brackets and tags</h4>
+    
+    <p>
+      HTML is comprised of <strong>elements</strong>,
+      or <strong>tags</strong>. You define tags
+      with <strong>brackets</strong>: <code>&lt;</code>
+      and <code>&gt;</code>, i.e. the "less than" and "greater than"
+      symbols. Like the <strong>square brackets</strong> for lists in
+      Python and Javascript, these <strong>brackets</strong> in HTML
+      also must always come in "less than" / "greater than" pairs,
+      which we call <strong>open</strong> and <strong>close</strong>
+      brackets. Any text in between these we say
+      is <strong>inside</strong> the brackets.
+    </p>
+
+    <p>
+      A pair of <strong>brackets</strong> indicates an
+      HTML <strong>tag.</strong> There are many, many different HTML
+      tags, and you define which one you are using with a keyword
+      inside the brackets. For example:
+    </p>
+    <pre>
+&lt;hr /&gt;
+</pre>
+
+    <p>
+      This is an <strong>hr</strong> tag, which stands for "horizontal
+      rule". It creates a horizontal line on the page.
+    </p>
+
+    <p>
+      Most HTML tags come in pairs that we call
+      <strong>open</strong> and <strong>close tags</strong>. Close
+      tags are indicated with a forward slash <code>/</code> at the
+      beginning. For example:
+      <pre>
+&lt;p&gt;
+  Hello
+&lt;/p&gt;
+</pre>
+
+      This is a <strong>p</strong> tag, which stands for
+      "paragraph". It creates an organizational unit within the page
+      called a paragraph, and the text "<code>Hello</code>" is said to
+      be <strong>inside</strong> the tag, also referred to as
+      the <strong>content</strong> of the
+      tag. The <strong>content</strong> of a tag can be plain text (as
+      in this case) or more HTML tags. When text (plain or HTML) is
+      inside a tag, whatever properties that tag indicates is applied
+      to all text and elements within it.
+    </p>
+
+    <p>
+      (Note that in my <code>&lt;hr /&gt;</code> example above, there
+      is a forward slash (<code>/</code>) inside the tag. When a tag
+      exists by itself, without needing a corresponding close tag, we
+      put the forward slash in the tag before the closing bracket.)
+    </p>
+
+
+    <p>
+      There are many, many different HTML tags. We will go over a
+      handful of them together, but more exist than we will have time
+      to talk about together in class. There are many useful resources
+      out there where you can learn more to supplement what we cover
+      together. I can recommend
+      <a href="https://www.w3schools.com/html/">W3 Schools</a> as a
+      pretty reliable resource.
+    </p>
+
+
+
+    
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="structure-vs-content">04.b. Structure and content, versus appearance</h4>
+
+    <p>
+      Some HTML tags affect the appearance of your content. For
+      example the content of an <code>&lt;h1&gt;&lt;/h1&gt;</code> tag
+      (which stands for "header 1") will be large and bold, while the
+      content of an <code>&lt;em&gt;&lt;/em&gt;</code> tag (which
+      stands for "emphasis") will be italicized.
+    </p>
+    <p>
+      Other tags at first glance don't really seem to have any visual
+      effect &mdash; for example the <code>&lt;p&gt;</code> tag that
+      we have already seen, or
+      the <code>&lt;div&gt;&lt;/div&gt;</code> tag (which stands for
+      "division").
+    </p>
+
+    <p>
+      HTML was invented as a <strong>markup language</strong> for
+      desrcibing documents and multimedia content. It was never really
+      intended initially as something to implement very complicated
+      user interactions and visual interfaces. Over time those
+      features came to be added in, and initially they were added with
+      new features of HTML itself, but people found this to be
+      frustrating and inadequate.
+    </p>
+    <p>
+      Over time, <strong>CSS</strong> was introduced, which stands
+      for <strong>cascading style sheets</strong>, as a way to manage
+      the appearance and user interface in a way that was separate
+      from HTML, which was then made to focus on
+      the <strong>content</strong> and <strong>structure</strong> of a
+      webpage.
+    </p>
+
+    <p>
+      By <strong>structure</strong> I mean any of the components of a
+      document that may have semantic or organizational
+      significance. Think about a newspaper, for example: it has a
+      title, a main headline, secondary headlines, articles with body
+      paragraphs, maybe smaller blocks containing excerpts or teasers
+      of other articles, etc. Or to take a simpler example, a basic
+      report or article may contain: a title, a subheader, a byline,
+      and sub-sections, each containing a section title and body
+      paragraphs &mdash; perhaps the article also starts with a
+      listing of all these sub-sections. A body paragraph may contain
+      a list, or maybe an outline composed of a list where each item
+      also contains its own sub-list.
+    </p>
+
+    <p>
+      In all of these examples, I am describing
+      the <strong>structure</strong> of a document. And remember that
+      because HTML tags can contain other HTML tags, this structure
+      can be hierarchical, made of components and subcomponents. We
+      call this hierarchical structure a <strong>tree</strong>.
+    </p>
+
+
+
+
+
+
+
+
+    (<a href="#table-of-contents">jump back up to table of contents</a>)
+    <h4 id="html-structure-example">04.c. Example of HTML as structure</h4>
+
+    <p>
+      Here's an example of a snippet of HTML code that demonstrates
+      this. It shows how you might use tags to create a document
+      structure, and the default appearance for this HTML code as
+      defined by your browser. This code also introduces
+      the <code>&lt;ul&gt;</code> and <code>&lt;li&gt;</code> tags,
+      which indicate an <strong>unordered list</strong> and
+      a <strong>list item</strong>, respectively. In an unordered
+      list, items are indicated with bullets. (HTML also offers
+      an <strong>ordered list</strong>, <code>&lt;ol&gt;</code>, which
+      defaults to list items being displayed with numerical
+      indicators.)
+    </p>
+
+    <p>
+      Notice that I am using three <code>&lt;div&gt;</code> tags here
+      that are not visible on the right, but they are contributing to
+      defining the structure of this document.
+      <code>&lt;div&gt;</code> tags are used to indicate blocks, or
+      sections of content. In a minute we'll see how these can
+      function as things whose appearance you can control with CSS.
+    </p>
+
+    <div style="width: 800px; height: 715px;">
+      <div style="width: 390px; float: left;">
+	<pre>
+&lt;body&gt;
+&lt;h1&gt;Autobiography&lt;/h1&gt;
+&lt;h2&gt;By Gritty Monsteur&lt;/h2&gt;
+&lt;div&gt;
+  &lt;h3&gt;Past&lt;/h3&gt;
+  &lt;p&gt;
+    I was born thousands of years ago
+    in Monsterville.
+  &lt;/p&gt;
+  &lt;p&gt;
+    I come from a long line of monsters.
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;h3&gt;Present&lt;/h3&gt;
+  &lt;p&gt;
+    I like:
+    &lt;ul&gt;
+	&lt;li&gt;ice skating&lt;/li&gt;
+	&lt;li&gt;the color orange&lt;/li&gt;
+	&lt;li&gt;doing pranks&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;h3&gt;Future&lt;/h3&gt;
+  &lt;p&gt;
+    One day I hope to be a hockey player.
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+</pre>	
+      </div>
+      
+      <div style="width: 370px; float: left; margin-left: 18px; margin-top: 15px; padding-left: 20px; border: solid 1px black; font: 15px/21px 'Helvetica'; ">
+	  <h1 style="text-transform: none; font-family: sans-serif;">Autobiography</h1>
+	  <h2 style="text-transform: none; font-family: sans-serif;">By Gritty Monsteur</h2>
+	  <div>
+	    <h3 style="text-transform: none;">Past</h3>
+	    <p>
+	      I was born thousands of years ago in Monsterville.
+	    </p>
+	    <p>
+	      I come from a long line of monsters.
+	    </p>
+	  </div>
+	  <div>
+	    <h3 style="text-transform: none;">Present</h3>
+	    <p>
+	      I like:
+	      <ul style="list-style-type: disc; text-indent: inherit;">
+		<li>ice skating</li>
+		<li>the color orange</li>
+		<li>doing pranks</li>
+	      </ul>
+	    </p>
+	  </div>
+	  <div>
+	    <h3 style="text-transform: none;">Future</h3>
+	    <p>
+	      One day I hope to be a hockey player.
+	    </p>
+	  </div>
+      </div>
+    </div>
+
+    <div style="width: 600px; margin: 0 auto; text-align: center;">
+      <img src="images/project1-1 - HTML DOM gritty-tree.png" style="width: 600px; border: solid 1px #000;"/>
+      <em>
+	The internal DOM tree structure of this HTML snippet.
+      </em>
+    </div>
+
+    <div>
+
+      <p>
+	The structure of an HTML document can also add semantic
+	significance to its contents. Web developers typically use
+	HTML tags that specify structure as ways to indicate the
+	semantic meaning of a document. And that means that the code
+	that we write to analyze web pages can do the same. For
+	example, something in an <code>&lt;h1&gt;</code> will likely
+	be a title or other important keywords for the page,
+	while <code>&lt;li&gt;</code> tags will likely indicate some
+	kind of listed information which, depending on other context,
+	could be names, dates, prices, etc.
+      </p>
+
+    </div>
+
+    <p>
+      For today, the important thing to understand about this is that
+      the browser processes the HTML and uses it to build this tree
+      structure called a <strong>DOM</strong>, which stands for
+      <strong>Document Object Model</strong>. It is referred to as a
+      tree, even though more accurately we might see it as an
+      upside-down tree &mdash; or, given the etymology of our class
+      title, maybe we could view it as a tree's root structure.  
+    </p>
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="browser-inspect">04.d. Examining a web page with the inspect tool</h4>
+
+    <p>
+      One way to learn about the internal structure of a webpage, as
+      well as other behaviors and properties, is with the
+      browser <strong>inspect tool</strong>.
+    </p>
+
+    <div class="image">
+      <img src="images/project1-1 - HTML browser inspect.png" />
+      <em>Right-click on any element on the page and click "Inspect"
+      to open the Chrome developer tools pane. From there you can
+      mouse-over any HTML element and see it highlighted on the
+      page. Click on any element and Chrome will tell you what CSS
+      properties have been assigned to it.</em>
+    </div>
+    
+    <p>
+      I suggest we think of this as an example of radical software.
+      We can use some tricks within this tool to do things like
+      circumvent paywalls by tweaking HTML &amp; CSS properties within
+      the structure of a page. Another good trick is to modify the
+      content of a webpage to create a believable spoof which you
+      could then screenshot and circulate. Folks
+      like <a href="https://theyesmen.org/">The Yes Men</a> have done
+      this kind of media activism very effectively.
+    </p>
+
+    <p>
+      Keep in mind that these changes you are making are only having
+      an effect locally, in the version of the page that your browser
+      is showing you, a kind of local copy. You are not modifying the
+      page on the server, because you do not have access to that
+      computer. You cannot share these changes with others to see
+      because you can't control how these other web servers deliver
+      HTML and CSS data.
+    </p>
+
+
+
+
+
+
+
+
+    
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="first-technique">05. Our first browser extension technique: modifying CSS properties</h3>
+
+    <p>
+      Today let&apos;s look at one very simple technique to modify the
+      web page being displayed to the user by adding a thin red border
+      to each element.
+    </p>
+    <p>
+      The starting point of the <code class="cli">content.js</code>
+      file in your extension code should look like this:
+    </p>
+    <pre>
+var elements = document.getElementsByTagName('p');
+
+for (var i = 0; i &lt; elements.length; i++) {
+   var element = elements[i];
+}
+</pre>
+
+    <p>
+      What that code does is <strong>select</strong> (or
+      &quot;<strong>target</strong>&quot;)
+      every <code>&lt;p&gt;</code> tag on the page, and save those
+      into a <strong>list</strong> in a variable that this code
+      calls <code>elements</code>. (This is an arbitrary name and not
+      a keyword. We could have called this
+      variable <code>spaghetti</code>.) Then the
+      code <strong>loops</strong> over each item in this list, and for
+      each one, runs some code. To start, that code did nothing. It
+      simple accessed each item of the list in turn and assigned it a
+      variable called <code>element</code>. (Again, an arbitrary
+      name.) Now let&apos;s see how we can do something with that.      
+    </p>
+
+    <p>
+      The <strong>object</strong> called <code>element</code> has some
+      properties and functions we can access. One of these is
+      called <strong>style</strong>, which represents all the CSS
+      properties that have been assigned to this element. (We&apos;ll
+      talk more about CSS next week.)
+    </p>
+    <p>
+      There is a function called <code>setProperty()</code> that we
+      can use to modify these CSS properties. To start, let&apos;s set
+      a red border on each <code>&lt;p&gt;</code> element. That code
+      would look like this:
+    </p>
+    <pre>
+var elements = document.getElementsByTagName('p');
+
+for (var i = 0; i &lt; elements.length; i++) {
+   var element = elements[i];
+
+   <span class="new">element.style.setProperty('border','solid 1px red');</span>
+
+}
+</pre>
+
+    <p>
+      (Throughout my class notes this semester, when working through a
+      coding example, I will indicate new code <span class="new">in
+      blue with a box underline</span>. I will indicate modified
+      code <span class="changed">in orange with a thin
+      underline</span>. If I can ever make these styles more visible
+      or accessible to you, please don&apos;t hesitate to ask.)
+    </p>
+    <p>
+      Now if you save this code and reload your browser extenstion,
+      you should see a thin read border on any web page that you
+      visit.
+    </p>
+
+
+    <p>
+      If you ever get sick of this behavior, remember that you can
+      always go back to the Extension Manager page
+      (<code>chrome://extensions</code>) and flip the switch to turn
+      this extension off.
+    </p>
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="while-loop">05.a. Two loop styles: <code>for</code> and <code>while</code></h4>
+
+
+    <p>
+      In class we talked about that <code>for</code> loop syntax and
+      tried to unpack exactly what is going on there. I explained that
+      for some folks it might be easier to conceptualize the
+      iterating, repeating behavior of a loop by examining a different
+      syntax which is functionality equivalent: the <code>while</code>
+      loop. Re-writing the above example using a <code>while</code>
+      loop would look like this:
+    </p>
+    <pre>
+var i = 0;
+while (i &lt; elements.length) {
+   var element = elements[i];
+
+   element.style.setProperty("border","solid 1px red");
+   i = i + 1;
+}
+</pre>
+
+    <p>
+      Note how all the same syntax elements are there: <code>var i =
+      0</code>, <code>i &lt; elements.length</code>, and <code>i = i
+      +n 1</code> (which is the same as <code>i++</code>) but arranged
+      in code slightly differently.
+    </p>
+    <p>
+      Personally I find <code>while</code> loops much clearer to
+      read. You can step through it from top to bottom and see how the
+      code will create a new temporary variable <code>i</code>, set it
+      to an initial value (<code>0</code>), then as long as that
+      condition is true (<code>while</code> it is true), repeat the
+      code inside that <strong>block</strong> (in between the curly
+      braces <code>{ }</code>). Within that block, some code is run,
+      and each time, the temporary variable is increased
+      by <code>1</code>, meaning that eventually the looping condition
+      (<code>i &lt; elements.length</code> will no longer be true and the
+      loop will stop repeating.
+    </p>
+    <p>
+      You can use whichever form of loop you wish this
+      semester. Advanced programmers tend to prefer the compactness
+      of <code>for</code> loops, but beginners tend to prefer the
+      clarity of <code>while</code>.
+    </p>
+
+
+    
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="more-advanced-css-randomness">05.b. More advanced CSS techniques with randomness</h4>
+
+    <p>
+      An additional technique for how you can use randomized values to
+      modify CSS properties follows.
+    </p>
+
+    <p>
+      We started working wtih random numbers by looking at this
+      JavaScript expression:
+      <pre>
+Math.random()
+</pre>
+      This generates a random number between 0 and 1. Digital color is
+      usually specified as R, G, and B components, where each
+      component is specified as a number between 0 and 255 (that comes
+      out of the history of using 8 bits to store color). 
+    </p>
+    <p>
+      How can you take a random variable between 0 and 1 and map that
+      into the range of 0 to 255? ... After discussing this for a bit
+      we realized that the answer is to multiply, in this case
+      multiply by 255. Since color values should also be integers, we
+      also want to round the results of that calculation. So
+      generating a random integer between 0 and 255 would look like
+      this:
+      <pre>
+Math.round(Math.random()*255)
+</pre>
+    </p>
+    <p>
+      Let&apos;s set that to a variable, and do that three times: once
+      for each color component:
+      <pre>
+r = Math.round(Math.random()*255);
+g = Math.round(Math.random()*255);
+b = Math.round(Math.random()*255);
+</pre>
+    </p>
+    <p>
+      As a CSS property, RGB color is set with a string that looks
+      like this: <code>&quot;rgb(255,255,255)&quot; </code>
+    </p>
+    <p>
+      Using the <code>+</code> operator as string concatenation would
+look like this:
+      <pre>
+var c = "rgb(" + r + "," + g + "," + b + ")";
+</pre>
+    </p>
+    <p>
+      Let&apos;s use this example to practice working with
+      the <code>while</code> loop syntax that I explained in the
+      previous section.  Putting that altogether will look like this:
+<pre>
+var elements = document.getElementsByTagName("p");
+
+var i = 0;
+while (i &lt; elements.length) {
+   var element = elements[i];
+
+   element.style.setProperty(&quot;border&quot;,&quot;solid 5px red&quot;);
+
+   <span class="new">r = Math.round(Math.random()*255);</span>
+   <span class="new">g = Math.round(Math.random()*255);</span>
+   <span class="new">b = Math.round(Math.random()*255);</span>
+
+   <span class="new">// Color in CSS looks like this: rgb(255,255,255)</span>
+   <span class="new">var c = &quot;rgb(&quot; + r + &quot;,&quot; + g + &quot;,&quot; + b + &quot;)&quot;;</span>
+
+   element.style.setProperty(&quot;background-color&quot;, <span class="changed">c</span>);
+
+   i = i + 1;
+}
+</pre>
+    </p>
+
+
+
+
+
+
+    
+
+
+
+
+
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="debugging">06. Debugging techniques</h3>
+
+    <p>
+      Let&apos;s think about debugging two kinds of code
+      problems: <strong>load-time errors</strong>, which can include
+      things like <strong>syntax errors</strong>, and <strong>run-time
+      errors</strong>, which occur when code is valid but not
+      performing as intended.
+    </p>
+
+
+
+
+
+    <h4 id="debugging-extension-manager">05.a. Using the extension manager (load-time errors)</h4>
+
+    <p>
+      Let&apos;s say you inadvertently make a syntax error. For
+      example, say you type the wrong name for a JavaScript
+      command. Maybe your code would look something like this:
+    </p>
+    <pre>
+var elements = document.<span class="changed">foobar</span>("p");
+
+var i = 0;
+while (i &lt; elements.length) {
+   var element = elements[i];
+
+   element.style.setProperty("border","solid 5px red");
+
+   i = i + 1;
+}
+</pre>
+    <p>
+      Obviously this is not a valid JavaScript function (the one I
+      probably had in mind in this case
+      was <code>getElementsByTagName()</code>). If I save this code
+      and try to reload it in the Extensions Manager, at first
+      everything would seem fine. But if I try to reload any other
+      webpage that would activate the extension code, a button will
+      appear in the Extensions Manager saying "Error."
+    </p>
+
+    <div class="image" style="width: 300px;">
+      <img style="width: 300px;" src="images/project1-1 - debug extension manager.png" />
+    </div>
+
+    <p>
+      Clicking that button gives me some great debugging information,
+      which usually includes the file and even specific line number
+      that has a problem:
+    </p>
+
+    <div class="image">
+      <img src="images/project1-1 - debug extension manager 2.png" />
+    </div>
+
+    <p>
+      After trying to fix the problem, you can reload the extension
+      and try to reload the page. But before you do that, you should
+      clear the error message, either by clicking the trashcan icon or
+      the "Clear all" button. Reloading the extension does not
+      automatically clear these errors, so skipping this step means
+      that when you try to reload the page, you may still see errors,
+      but these would be "leftover" from the previous load ... which
+      can be very confusing!
+    </p>
+    
+    
+    <h4 id="debugging-console">05.b. Using the console (run-time errors)</h4>
+    <p>
+      The above technique is good for tracking down problems
+      with <strong>syntax</strong>, which we call <strong>load-time
+      errors</strong>. But what if your syntax is fine but you have a
+      problem with the behavior of code that is operational? These are
+      what we call
+      <strong>run-time errors</strong>. To track these down
+      you&apos;ll need some other techniques.
+    </p>
+
+    <p>
+      Let&apos;s say you were working on a project and made a mistake
+      in your HTML tag name, ending up with something like this:
+      <pre>
+var elements = document.getElementsByTagName("<span class="changed">foobar</span>");
+</pre>
+      This code would load just fine but would probably causie your
+      code to not perform as expected. If you were encountering
+      incorrect behavior and weren&apos;t sure why, you might want to
+      start by adding the following line to print out the contents of
+      that variable to the <strong>console</strong>:
+
+    <pre>
+var elements = document.getElementsByTagName("<span class="changed">foobar</span>");
+
+<span class="new">console.log(elements);</span>
+</pre>
+    </p>
+    <p>
+      Now, you can open up your browser&apos;s developer tools,
+      click <code class="cli">console</code>, and reload your page to
+      look for your printout.
+    </p>
+    <div class="image">
+      <img src="images/project1-1 - debug-console.png" />
+    </div>
+    <p>
+      Examining that, hopefully you might realize that your code was
+      not matching any HTML tags, causing the <code>elements</code>
+      list to come back empty.
+    </p>
+
+
+
+
+
+
+    
+    
+    
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="concluding-and-lab-notebook">07. Conclusions &amp; lab notebook entries</h3>
+
+    <p>
+      Your only homework for this week is to make sure you can get
+      this all to work and try some oteher similar
+      experimentation. You may want to consult
+      the <a href="https://www.w3schools.com/css/">W3 Schools CSS
+      tutorial</a> for some ideas of other CSS properties you can try
+      modifying.
+    </p>
+    <p>
+      Can you use the technique I demonstrated above and try to modify
+      the background color of various elements on the page? Perhaps
+      you could try to select <code>&lt;div&gt;</code> elements
+      instead of or in addition to <code>&lt;p&gt;</code>s.
+    </p>
+    <p>
+      For your lab notebook, respond to the prompts that I have posted
+      above, note down any challenges you faced in getting this to
+      work and how you solved them, and offer some comments about your
+      efforst to experiment with this technique to go further in some
+      direction.
+    </p>
+
+    <p>
+      <span class="highlight"><strong>Additional
+	  examples:</strong></span>
+
+      Another example of a simple browser extension related to
+      this project:
+      <a href="https://chromewebstore.google.com/detail/microsoft-to-microslop/hlkljlkdinjnbfmclionhbefbnefcgll">Microslop</a>.
+      It replaces all instances of one bit of text with another
+      &mdash; something like this would be a great example of what you
+      could do with this project, although I think you could get a bit
+      more sophisticated over the next few weeks :)
+    </p>
+    <p>
+      Another more sophisticated example is Rafaël Rozendaal's, "<a href="https://www.abstractbrowsing.net/">Abstract Browsing</a>"
+    </p>
+    
+    <p>
+      We&apos;ll talk about some other more interesting browser
+      extension techniques next week!
+    </p>
+
+
+
+<!-- 
+access token stuff
+https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token
+
+  -->
+
+
+
+    
+    
+    <div class="horizontal-rule"></div>
+    <script type="text/JavaScript">
+      datUpdated = new Date(document.lastModified) ;
+      document.write("Last Updated: " + datUpdated);
+    </script>
+
+    </div>
+
+</body>
+
+</html>
+
