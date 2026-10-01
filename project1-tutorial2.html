@@ -1,0 +1,1640 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>Radical Software, Fall 2026: Project 1, Tutorial 2</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="js/links.js"></script>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <p class="nav">
+      <a href="index.html">Home</a> | <a href="schedule.html">Schedule &amp; Readings</a> | <a href="resources.html">Links &amp; Resources</a>
+    </p>
+
+    <p style="float: right;">
+      [ Links open in: <span id="window-same" class="selected">same window</span> | <span id="window-new">new window</span> ]
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h1>Radical Software</h1>
+    <p>
+      MCST 294-02 / COMP 194-03, Fall 2026<br/>
+      Rory Solomon <br />
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h2>Project 1, Tutorial 2: CSS and text modification with a browser extension</h2>
+
+
+
+
+
+
+
+    <!-- THINGS TO ADD -->
+    <!-- XXXXXXXX -->
+    <!-- XXXXXXXX -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+    FOR CONCLUSION:
+
+
+    <p>
+    You may want to consult
+      the <a href="https://www.w3schools.com/css/">W3 Schools CSS
+      tutorial</a> for some ideas of other CSS properties you can try
+      modifying.
+    </p>
+    <p>
+      Can you use the technique I demonstrated above and try to modify
+      the background color of various elements on the page? Perhaps
+      you could try to select <code>&lt;div&gt;</code> elements
+      instead of or in addition to <code>&lt;p&gt;</code>s.
+    </p>
+
+
+	
+
+
+    
+
+
+
+
+    <!-- XXXXXXXX -->
+    <!-- XXXXXXXX -->
+    <!-- XXXXXXXX -->
+
+
+
+
+    
+    <p>
+      In our <a href="project1-tutorial1.html">tutorial last week</a>
+      we got started on this project, downloaded some source code as a
+      starting point, and got setup with the basic structure of
+      your <strong>browser extension</strong>. This week we are going
+      to talk about functionality we can start adding to your
+      extension to allow it to intervene in a web user&apos;s browsing
+      experience by modifying the HTML page currently being displayed.
+    </p>
+
+    <p>
+      In order to understand how this works, we need to take a bit of
+      a detour into the world of <strong>CSS</strong> and it's
+      relationship to <strong>HTML</strong>.
+    </p>
+
+
+    <h3 id="table-of-contents">Table of contents</h3>
+
+    <ol class="table-of-contents">
+
+
+      <li>
+	<a href="#background-html">Background: HTML crash course / overview</a>
+      </li>
+      <ol>
+	<li>
+	  <a href="#open-close-brackets-tags">HTML syntax: open and close brackets and tags</a>
+	</li>
+	<li>
+	  <a href="#structure-vs-content">Structure and content, versus appearance</a>
+	</li>
+	<li>
+	  <a href="#html-structure-example">Example of HTML as structure</a>
+	</li>
+	<li>
+	  <a href="#browser-inspect">Examining the structure &amp; appearance of a web page with the inspect tool</a>
+	</li>
+	<li>
+	  <a href="#sample-html-file">A sample HTML file to work with</a>
+	</li>
+      </ol>
+
+      <li>
+	<a href="#css">Introducing CSS</a>
+      </li>
+      <ol>
+	<li>
+	  <a href="#attaching-css">Attaching CSS to an HTML page</a>
+	</li>
+      </ol>
+      <!-- <li>
+	<a href="#technique-modifying-css">Extension technique: modifying CSS properties</a>
+	</li> -->
+
+
+      
+      <li>
+	<a href="#first-technique">Our first browser extension technique: modifying CSS properties</a>
+      </li>
+      <ol>
+	<li>
+	  <a href="#while-loop">Two loop styles: <code>for</code> and <code>while</code></a>
+	</li>
+	<li>
+	  <a href="#more-advanced-css-randomness">More advanced CSS techniques with randomness</a>
+	</li>
+      </ol>
+      <li>
+	<a href="#debugging">Debugging techniques</a>
+      </li>
+      <ol>
+	  <li>
+	    <a href="#debugging-extension-manager">Using the extension manager (load-time errors)</a>
+	  </li>
+	  <li>
+	    <a href="#debugging-console">Using the console (run-time errors)</a>
+	  </li>
+	</ol>
+
+
+
+      
+      <li>
+	<a href="#technique-search-replace">Extension technique: Search-and-replace text to modify page content</a>
+      </li>
+      <li>
+	<a href="#technique-highlighting-text">Extension technique: Highlighting text</a>
+      </li>
+    </ol>
+
+
+    <div style="width: 600px; margin: 0 auto 25px; text-align: center;">
+      <img src="images/project1-2 - gordon matta clark bingo.jpg" style="width: 600px; border: solid 1px #000;"/>
+      <em>The artist Gordon Matta Clark would often work by removing
+      the façades of structures in the built environment, presenting
+      structural features as aesthetic objects. Today we'll be mucking
+      around with the structure and "façade" of HTML documents. This
+      piece is called "Bingo" (1974) on view here
+      at <a href="https://www.moma.org/learn/moma_learning/gordon-matta-clark-bingo-1974/">MoMA</a>.</em>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="background-html">01. Background: HTML crash course / overview</h3>
+
+    <p>
+      Since this extension is going to modify the <em>content</em> of
+      a webpage, in order to understand how it works, you have to
+      understand a little bit about how web pages are built. What
+      follows is a brief detour offering a crash course in HTML and
+      how it is used to build webpages. If you&apos;ve done HTML &amp; CSS
+      before, hopefully this review will strengthen the fundamentals
+      of your understanding. If you've never done HTML &amp; CSS
+      before, hopefully this brief intro offers a solid foundation to
+      start with.
+    </p>
+
+    <p>
+      <strong>HTML</strong> stands for <strong>hypertext markup
+      language</strong>, and it is the language used to construct web
+      pages.
+    </p>
+
+    <div class="image" style="width: 900px;">
+      <a href="images/project1-1 - HTML view source.png">
+	<img src="images/project1-1 - HTML view source.png" style="width: 900px;"/>
+      </a>
+      <em>In any browser, you can always <strong>view source</strong>
+      to investigate the HTML that was used to construct the page you
+      are viewing. In Chrome, that is in the menu under View &gt;
+      Developer &gt; View Source. Note in this image how, even if you
+      know no HTML, you can start to see the relationship between the
+      source code and the visual presentation of this page. (Click to
+      enlarge.)</em>
+    </div>
+
+
+
+
+
+    
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="open-close-brackets-tags">01.a. HTML syntax: open and close brackets and tags</h4>
+    
+    <p>
+      HTML is comprised of <strong>elements</strong>,
+      or <strong>tags</strong>. You define tags
+      with <strong>brackets</strong>: <code>&lt;</code>
+      and <code>&gt;</code>, i.e. the "less than" and "greater than"
+      symbols. Like the <strong>square brackets</strong> for lists in
+      Python and Javascript, these <strong>brackets</strong> in HTML
+      also must always come in "less than" / "greater than" pairs,
+      which we call <strong>open</strong> and <strong>close</strong>
+      brackets. Any text in between these we say
+      is <strong>inside</strong> the brackets.
+    </p>
+
+    <blockquote>
+      <p>
+	(Reminder that throughout my class notes I will
+	use <strong>bold</strong> to indicate <strong>key technical
+	jargon</strong> that is important for you to
+	understand. Learning to code is not just about learning
+	programming language syntax, but also includes learning how to
+	speak about programs with other programmers. The technical
+	vocabulary of these bolded terms will help you do that, and it
+	is as important to practice using as the specific code
+	commands we&apos;ll be working with.)
+      </p>
+      <p>
+	<strong>For your lab notebook.</strong> Try looking through
+	the notes for the technical tutorials so far and make a mini
+	glossary of the bolded terms and their definitions.
+      </p>
+    </blockquote>
+
+    <p>
+      A pair of <strong>brackets</strong> indicates an
+      HTML <strong>tag.</strong> There are many, many different HTML
+      tags, and you define which one you are using with a keyword
+      inside the brackets. For example:
+    </p>
+    <pre>
+&lt;hr /&gt;
+</pre>
+
+    <p>
+      This is an <strong>hr</strong> tag, which stands for "horizontal
+      rule". It creates a horizontal line on the page.
+    </p>
+
+    <p>
+      Most HTML tags come in pairs that we call
+      <strong>open</strong> and <strong>close tags</strong>. Close
+      tags are indicated with a forward slash <code>/</code> at the
+      beginning. For example:
+      <pre>
+&lt;p&gt;
+  Hello
+&lt;/p&gt;
+</pre>
+
+      This is a <strong>p</strong> tag, which stands for
+      "paragraph". It creates an organizational unit within the page
+      called a paragraph, and the text "<code>Hello</code>" is said to
+      be <strong>inside</strong> the tag, also referred to as
+      the <strong>content</strong> of the
+      tag. The <strong>content</strong> of a tag can be plain text (as
+      in this case) or more HTML tags. When text (plain or HTML) is
+      inside a tag, whatever properties that tag indicates is applied
+      to all text and elements within it.
+    </p>
+
+    <p>
+      (Note that in my <code>&lt;hr /&gt;</code> example above, there
+      is a forward slash (<code>/</code>) inside the tag. When a tag
+      exists by itself, without needing a corresponding close tag, we
+      put the forward slash in the tag before the closing bracket.)
+    </p>
+
+
+    <p>
+      There are many, many different HTML tags. We will go over a
+      handful of them together, but more exist than we will have time
+      to talk about together in class. There are many useful resources
+      out there where you can learn more to supplement what we cover
+      together. I can recommend
+      <a href="https://www.w3schools.com/html/">W3 Schools</a> as a
+      pretty reliable resource.
+    </p>
+
+
+
+    
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="structure-vs-content">01.b. Structure and content, versus appearance</h4>
+
+    <p>
+      Some HTML tags affect the appearance of your content. For
+      example the content of an <code>&lt;h1&gt;&lt;/h1&gt;</code> tag
+      (which stands for "header 1") will be large and bold, while the
+      content of an <code>&lt;em&gt;&lt;/em&gt;</code> tag (which
+      stands for "emphasis") will be italicized.
+    </p>
+    <p>
+      Other tags at first glance don't really seem to have any visual
+      effect &mdash; for example the <code>&lt;p&gt;</code> tag that
+      we have already seen, or
+      the <code>&lt;div&gt;&lt;/div&gt;</code> tag (which stands for
+      "division").
+    </p>
+
+    <p>
+      HTML was invented as a <strong>markup language</strong> for
+      desrcibing documents and multimedia content. It was never really
+      intended initially as something to implement very complicated
+      user interactions and visual interfaces. Over time those
+      features came to be added in, and initially they were added with
+      new features of HTML itself, but people found this to be
+      frustrating and inadequate.
+    </p>
+    <p>
+      Over time, <strong>CSS</strong> was introduced, which stands
+      for <strong>cascading style sheets</strong>, as a way to manage
+      the appearance and user interface in a way that was separate
+      from HTML, which was then made to focus on
+      the <strong>content</strong> and <strong>structure</strong> of a
+      webpage.
+    </p>
+
+    <p>
+      By <strong>structure</strong> I mean any of the components of a
+      document that may have semantic or organizational
+      significance. Think about a newspaper, for example: it has a
+      title, a main headline, secondary headlines, articles with body
+      paragraphs, maybe smaller blocks containing excerpts or teasers
+      of other articles, etc. Or to take a simpler example, a basic
+      report or article may contain: a title, a subheader, a byline,
+      and sub-sections, each containing a section title and body
+      paragraphs &mdash; perhaps the article also starts with a
+      listing of all these sub-sections. A body paragraph may contain
+      a list, or maybe an outline composed of a list where each item
+      also contains its own sub-list.
+    </p>
+
+    <p>
+      In all of these examples, I am describing
+      the <strong>structure</strong> of a document. And remember that
+      because HTML tags can contain other HTML tags, this structure
+      can be hierarchical, made of components and subcomponents. We
+      call this hierarchical structure a <strong>tree</strong>.
+    </p>
+
+
+
+
+
+
+
+
+    (<a href="#table-of-contents">jump back up to table of contents</a>)
+    <h4 id="html-structure-example">01.c. Example of HTML as structure</h4>
+
+    <p>
+      Here's an example of a snippet of HTML code that demonstrates
+      this. It shows how you might use tags to create a document
+      structure, and the default appearance for this HTML code as
+      defined by your browser. This code also introduces
+      the <code>&lt;ul&gt;</code> and <code>&lt;li&gt;</code> tags,
+      which indicate an <strong>unordered list</strong> and
+      a <strong>list item</strong>, respectively. In an unordered
+      list, items are indicated with bullets. (HTML also offers
+      an <strong>ordered list</strong>, <code>&lt;ol&gt;</code>, which
+      defaults to list items being displayed with numerical
+      indicators.)
+    </p>
+
+    <p>
+      Notice that I am using three <code>&lt;div&gt;</code> tags here
+      that are not visible on the right, but they are contributing to
+      defining the structure of this document.
+      <code>&lt;div&gt;</code> tags are used to indicate blocks, or
+      sections of content. In a minute we'll see how these can
+      function as things whose appearance you can control with CSS.
+    </p>
+
+    <div class="new-changed">
+      (Text displayed with this <code>periwinkle</code> background will always <br/>
+       be valid code syntax that you should be able to copy/paste into<br/>
+      your text editor. In this case it is HTML, but in other cases <br/>
+      it may be JavaScript.)
+    </div>
+
+	  
+    <div style="width: 800px; height: 715px;">
+      <div style="width: 390px; float: left;">
+	<pre>
+&lt;body&gt;
+&lt;h1&gt;Autobiography&lt;/h1&gt;
+&lt;h2&gt;By Gritty Monsteur&lt;/h2&gt;
+&lt;div&gt;
+  &lt;h3&gt;Past&lt;/h3&gt;
+  &lt;p&gt;
+    I was born thousands of years ago
+    in Monsterville.
+  &lt;/p&gt;
+  &lt;p&gt;
+    I come from a long line of monsters.
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;h3&gt;Present&lt;/h3&gt;
+  &lt;p&gt;
+    I like:
+    &lt;ul&gt;
+	&lt;li&gt;ice skating&lt;/li&gt;
+	&lt;li&gt;the color orange&lt;/li&gt;
+	&lt;li&gt;doing pranks&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;h3&gt;Future&lt;/h3&gt;
+  &lt;p&gt;
+    One day I hope to be a hockey player.
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+</pre>	
+      </div>
+      
+      <div style="width: 370px; float: left; margin-left: 18px; margin-top: 15px; padding-left: 20px; border: solid 1px black; font: 15px/21px 'Helvetica'; ">
+	  <h1 style="text-transform: none; font-family: sans-serif;">Autobiography</h1>
+	  <h2 style="text-transform: none; font-family: sans-serif;">By Gritty Monsteur</h2>
+	  <div>
+	    <h3 style="text-transform: none;">Past</h3>
+	    <p>
+	      I was born thousands of years ago in Monsterville.
+	    </p>
+	    <p>
+	      I come from a long line of monsters.
+	    </p>
+	  </div>
+	  <div>
+	    <h3 style="text-transform: none;">Present</h3>
+	    <p>
+	      I like:
+	      <ul style="list-style-type: disc; text-indent: inherit;">
+		<li>ice skating</li>
+		<li>the color orange</li>
+		<li>doing pranks</li>
+	      </ul>
+	    </p>
+	  </div>
+	  <div>
+	    <h3 style="text-transform: none;">Future</h3>
+	    <p>
+	      One day I hope to be a hockey player.
+	    </p>
+	  </div>
+      </div>
+    </div>
+
+    <div style="width: 600px; margin: 0 auto; text-align: center;">
+      <img src="images/project1-1 - HTML DOM gritty-tree.png" style="width: 600px; border: solid 1px #000;"/>
+      <em>
+	The internal DOM tree structure of this HTML snippet.
+      </em>
+    </div>
+
+    <div>
+
+      <p>
+	The structure of an HTML document can also add semantic
+	significance to its contents. Web developers typically use
+	HTML tags that specify structure as ways to indicate the
+	semantic meaning of a document. And that means that the code
+	that we write to analyze web pages can do the same. For
+	example, something in an <code>&lt;h1&gt;</code> will likely
+	be a title or other important keywords for the page,
+	while <code>&lt;li&gt;</code> tags will likely indicate some
+	kind of listed information which, depending on other context,
+	could be names, dates, prices, etc.
+      </p>
+
+    </div>
+
+    <p>
+      For today, the important thing to understand about this is that
+      the browser processes the HTML and uses it to build this tree
+      structure called a <strong>DOM</strong>, which stands for
+      <strong>Document Object Model</strong>. It is referred to as a
+      tree, even though more accurately we might see it as an
+      upside-down tree &mdash; or, given the etymology of our class
+      title, maybe we could view it as a tree's root structure.  
+    </p>
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="browser-inspect">01.d. Examining the structure &amp; appearance of a web page with the inspect tool</h4>
+
+    <p>
+      One way to learn about the internal structure of a webpage, as
+      well as other behaviors and properties, is with the
+      browser <strong>inspect tool</strong>.
+    </p>
+
+    <div class="image">
+      <img src="images/project1-1 - HTML browser inspect.png" />
+      <em>Right-click on any element on the page and click "Inspect"
+      to open the Chrome developer tools pane. From there you can
+      mouse-over any HTML element and see it highlighted on the
+      page. Click on any element and Chrome will tell you what CSS
+      properties have been assigned to it.</em>
+    </div>
+
+
+    <p>
+      This is a great tool to explore how a webpage is built, and also
+      to learn HTML and CSS syntax. You can use the inspect tool to
+      have some fun modifying the structure and apperance of an HTML
+      page.
+    </p>
+
+    <p>
+      I suggest we think of this as an example of radical software.
+      We can use some tricks within this tool to do things like
+      circumvent paywalls by tweaking HTML &amp; CSS properties within
+      the structure of a page. Another good trick is to modify the
+      content of a webpage to create a believable spoof which you
+      could then screenshot and circulate. Folks
+      like <a href="https://theyesmen.org/">The Yes Men</a> have done
+      this kind of media activism very effectively.
+    </p>
+
+    <p>
+      Keep in mind that these changes you are making are only having
+      an effect <strong>locally</strong>, in the version of the page
+      that your browser is showing you, a kind of local copy. You are
+      not modifying the page on the server, because you do not have
+      access to that computer. You cannot share these changes with
+      others to see because you can't control how these other web
+      servers deliver HTML and CSS data.
+    </p>
+    <blockquote>
+      <p>
+	<strong>For your lab notebook.</strong> Think about this
+	concept of a <strong>local</strong> file that you can
+	modify. Is it still radical software if it only makes
+	modifications for you to see yourself? RSG founder Alex
+	Galloway <a href="https://drive.google.com/file/d/18knabZVK0Vsw_VQoOsKB6JJaKs6aWoDP/view?usp=sharing">once
+	wrote</a> that &quot;code only &apos;matters&apos; when it is
+	understood as being the substance of a network.&quot; Do you
+	agree? Is there a &quot;tree falls in the forest&quot; aspect
+	to the political aims of our media work?
+      </p>
+    </blockquote>
+
+    
+    <p>
+      But, what you can do however is create a browser extension that
+      makes these changes in an automated way, then share that browser
+      extension with others. In this way, anyone who installs your
+      browser extension will see modifications that you have done. Of
+      course, this entails figuring out how to automate these changes,
+      by running code to run in someone else's browser. For that we'll
+      be using JavaScript.
+    </p>
+
+    
+
+
+
+    
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="sample-html-file">01.e. A sample HTML file to work with</h4>
+
+    <p>
+      Let&apos;s make a sample HTML file to work with for today. Open
+      VS Code and make sure that you have
+      your <code class="cli">project-1-main</code> fiolder a the root
+      folder of your VS Code workspace. Your window should look
+      something like the below. If you don&apos;t
+      see <code class="cli">PROJECT-1-MAIN</code> in
+      the <code class="cli">EXPLORER</code> pane, open a new VS Code
+      window and drag that folder into it.
+    </p>
+    <div class="image">
+      <img src="images/project1-2 - VS Code open.png" />
+    </div>
+
+    <p>
+      In VS Code, select File &gt; New File, name
+      it <code class="cli">sample.html</code> and save it into
+      your <code class="cli">project-1-main</code> folder. Now let's
+      add the basic starting code for a web page. Start by
+      typing <code>html</code>. VS Code should give you some
+      autocomplete options. Select <code>html:5</code> and press
+      ENTER. That should give you <strong>HTML boilerplate</strong>,
+      which is a term for the basic code that you should add to begin
+      any HTML file. It should look like the below. For some versions
+      of VS Code, I&apos;ve been told you can add the <strong>HTML
+      boilerplate</strong> by typing <code>!</code> (SHIFT and 1) and
+      hitting ENTER. If you do not see that, you may need to mess
+      around with VS Code settings for something called &quot;Emmet
+      abbreviations&quot;.
+      <a href="https://code.visualstudio.com/docs/languages/html">More
+      info here</a>.
+    </p>
+    <div class="image">
+      <img src="images/project1-2 - html boilerplate.png" />
+    </div>
+    
+    <p>
+
+      Now let&apos;s start by copy/pasting the sample HTML code that
+      we were looking at last week, taking care to put
+      this <em>in</em> the <code>&lt;body&gt;</code> element (i.e. in
+      between the open and close <code>&lt;body&gt;</code> tags). Your
+      code should then look like this:
+    </p>
+    <div style="width: 800px; height: 630px;">
+      <div style="width: 390px; float: left;">
+	<pre>
+<span class="changed">&lt;body&gt;</span>
+&lt;h1&gt;Autobiography&lt;/h1&gt;
+&lt;h2&gt;By Gritty Monsteur&lt;/h2&gt;
+&lt;div&gt;
+  &lt;h3&gt;Past&lt;/h3&gt;
+  &lt;p&gt;
+    I was born thousands of years ago
+    in Monsterville.
+  &lt;/p&gt;
+  &lt;p&gt;
+    I come from a long line of monsters.
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;h3&gt;Present&lt;/h3&gt;
+  &lt;p&gt;
+    I like:
+    &lt;ul&gt;
+	&lt;li&gt;ice skating&lt;/li&gt;
+	&lt;li&gt;the color orange&lt;/li&gt;
+	&lt;li&gt;doing pranks&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;h3&gt;Future&lt;/h3&gt;
+  &lt;p&gt;
+    One day I hope to be a hockey player.
+  &lt;/p&gt;
+&lt;/div&gt;
+<span class="changed">&lt;/body&gt;</span>
+</pre>	
+      </div>
+    </div>
+
+    
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump
+    back up to table of contents</a>)</span>
+    <h3><a name="css">02. Introducing CSS</a></h3>
+
+    <p>
+      Now we can get started molding this HTML structure into the
+      layout that we're working toward. We do this with CSS, which
+      stands for <strong>Cascading StyleSheets</strong>. Where HTML
+      specifies the structure and semantics of a document, CSS is
+      added to control the visual display of that structure. As
+      we&apos;ve seen so far, most HTML tags have some kind of default
+      appearance (<code>&lt;h1&gt;</code> tags are larger, bolded
+      text; <code>&lt;li&gt;</code> tags have small bullets, etc). CSS
+      can be used to change and override any of these visual
+      aspects. Any display properties that are <em>not</em> explicitly
+      modified by your CSS code will fall back on the default
+      properties for each tag, which are specified by your browser,
+      and sometimes slightly different from one browser to another.
+    </p>
+
+    <p>
+      We won't be <em>writing</em> too much CSS code together for this
+      project, and instead we will be more focused on writing
+      JavaScript code to modify CSS. But there may be some parts of
+      your project that will require CSS, and in any case in order to
+      write code that modifies CSS, it is a pretty good idea to have a
+      solid foundation for how it works.
+    </p>
+    <p>
+      CSS code is comprised of a series of <strong>rules</strong>. The
+      basic structure of a CSS rule is as follows:
+      <div class="new-changed">
+	(CSS code will always be displayed with
+	an <span class="css">orange background</span> <br/> and rounded
+	corners.)
+      </div>
+      <pre class="css">
+p {
+  color: red;
+}
+</pre>
+
+      There are four main components to each rule:
+      <ul style="list-style: circle; text-indent: inherit;">
+	<li>
+	  The <strong>selector</strong> (in this
+	  case, <code class="css">p</code>): This <strong>targets</strong> which
+	  parts of your HTML document this rule will apply to. In this
+	  case, it will apply to <em>all</em> <code class="css">p</code> tags.
+	</li>
+	<li>
+	  The <strong>property</strong> (in this
+	  case <code class="css">color</code>): This specifies the
+	  visual quality that is being affected by this rule. This
+	  rule is setting the color of the content of all
+	  those <code class="css">p</code> elements.
+	</li>
+	<li>
+	  The <strong>curly braces</strong>. These must always come in
+	  pairs.
+	</li>
+	<li>
+	  The <strong>value</strong> (in this
+	  case <code class="css">red</code>): Each different property
+	  has its own valid values. For things related to size, these
+	  are usually <strong>pixel</strong> values and are appened
+	  with <code>px</code>, like this: <code class="css">width: 400px;</code>
+
+	  <p>
+	    For color properties, CSS includes some predefined words
+	    that you can use, such
+	    as <code class="css">red</code>, <code class="css">blue</code>,
+	    etc. But you can specify any color you'd like using RGB
+	    notation with values from 0-255, like
+	    this: <code class="css">color: rgb(155,155,255)</code>. Or
+	    you can use 6-digit
+	    <strong>hexadecimal</strong> notation that indicates the
+	    red, green, and blue components
+	    as: <code class="css">#RRGGBB</code> where each character
+	    here can be a value between 0-9, or a-f. a=10, b=11, c=12,
+	    etc, up to f which equals 15. From 0 to 15 is 16 values,
+	    hence the name hexadecimal. (Think "hexagon".) If this is
+	    confusing, you can use
+	    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Colors/Color_format_converter">a
+	      color chooser tool</a> to select a color and copy/paste
+	      the hexadecimal (or just "<strong>hex</strong>") value.
+	  </p>
+	</li>
+      </ul>
+    </p>
+
+
+    <p>
+      Some other syntax rules:
+      <ul style="list-style: circle; text-indent: inherit;">
+	<li>
+	  Like HTML, CSS ignores <strong>whitespace</strong>, so you
+	  could write rules all on one line if you wish, or space them
+	  out in a way that makes them more readable to you.
+	</li>
+	<li>
+	  Comments are added with this notation: <code class="css">/*
+	  */</code>. This punctuation must also always come in pairs,
+	  can span multiple lines, and can be placed anywhere within
+	  your CSS code. For example:
+      <pre class="css">
+/* This is a multi-line comment
+   about my first CSS rule.   
+*/
+p {
+  color: red; /* And this is a single-line comment. */
+}
+</pre>
+	</li>
+	<li>
+	  One rule may specify multiple properties &amp; values for a
+	  given selector, in which case they each must end with a
+	  semi-colon (<code class="css">;</code>). For example:
+<pre class="css">
+p {
+  color: red;
+  <span class="new">border: solid 1px;</span>
+}
+</pre>
+	</li>
+      </ul>
+    </p>
+
+    <p>
+      We can&apos;t possibly go over every available CSS property and all
+      their valid values. Perhaps if this were a web design course,
+      we'd spend a few weeks doing so. For our class, I'm only going
+      to show a you a couple, and offer you some pointers to where you
+      can look for more reference documentation about how CSS
+      works. Probably the best guide I can recommend is from the
+      Mozilla Developer Network (MDN). Here is their CSS tutorial:
+      <br/>
+      <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">MDN CSS Tutorial</a>
+    </p>
+    <p>
+      Notice the column on the left side with a long list of different
+      topics. Click on each of those to learn more. Particularly
+      useful I think are "Box Model," "Color," "Display," "Fonts," and
+      "Images."
+    </p>
+
+
+
+    
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="attaching-css">02.a. Attaching CSS to an HTML page</h4>
+
+    <p>
+      CSS rules are sort of "attached" or connected to the page
+      structure of an HTML document by <strong>including</strong> the
+      CSS code in the HTML. There are three main ways to include CSS
+      in an HTML page:
+      <ol>
+	
+	<li>
+	  <strong>Inline</strong>. For any HTML tag, you can include an
+	  attribute named <code>style</code>, which can include CSS
+	  code. For example:
+	  <pre>
+&lt;body&gt;
+&lt;h1 <span class="new">style=&quot;color: red;&quot;</span>&gt;Autobiography&lt;/h1&gt;
+&lt;h2&gt;By Gritty Monsteur&lt;/h2&gt;
+</pre>
+	  As above, you can specify multiple properties / values
+	  separated with semi-colons:
+	  <pre>
+&lt;body&gt;
+&lt;h1 style=&quot;color: red; <span class="new">border: solid 1px;</span>&quot;&gt;Autobiography&lt;/h1&gt;
+&lt;h2&gt;By Gritty Monsteur&lt;/h2&gt;
+</pre>
+
+	  In this case, these rules will apply <em>only</em> to this
+	  one specific <code>&lt;h1&gt;</code> tag. No others.
+
+	  <p>
+	    This is, in general, considered the worst way to apply CSS
+	    rules to your HTML. It is not general in any way, so if
+	    you wanted to create a consistent "look and feel" for a page
+	    by applying similar styles to different tags, you would
+	    have to copy/paste a lot of CSS code. Sometimes in limited
+	    cases though it can be a useful shortcut. But if you find
+	    yourself including a lot of CSS this way, switch to one of
+	    the below methods.
+	  </p>
+	</li>
+
+	<li>
+	  <strong>Internal</strong>. A better way is to include a big
+	  chunk of CSS rules at the top of your document, in
+	  the <code>&lt;head&gt;</code> section using
+	  a <code>&lt;style&gt;</code> tag, like so: (This HTML is a
+	  snippet from the complete HTML file above, as indicated by
+	  the jagged border.)
+	  <pre class="snippet">
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Document&lt;/title&gt;
+  <span class="new">&lt;style&gt;</span>
+    <span class="new">p {</span>
+      <span class="new">color: red;</span>
+      <span class="new">border: solid 1px;</span>
+    <span class="new">}</span>
+  <span class="new">&lt;/style&gt;</span>
+&lt;/head&gt;
+</pre>
+	  <p>
+	    This method is a little better
+	    than <strong>inline</strong>. It helps separate your tags
+	    specifying the structure of the document and the rules for
+	    how it is displayed. And the rules that you specify here
+	    will apply to all HTML elements on the page that match
+	    the <strong>selectors</strong> that you are using.
+	  </p>
+	</li>
+
+	<li>
+	  <strong>External</strong>. This is probably the best
+	  method. With this technique, you place all your CSS code
+	  in a separate file, which you reference from your HTML
+	  file.
+	  <p>
+	    To do this, create a new subfolder
+	    called <code>css</code> in your project folder, and within
+	    that, create a new file. I like to call my CSS
+	    file <code>style.css</code>, but you can call it anything
+	    you'd like, just make sure it ends in <code>.css</code>.
+	  </p>
+	  <p>
+	    Now, place your CSS rules in this file, and save it. The
+	    modify the <code>&lt;head&gt;</code> section of your HTML
+	    file like so:
+	    <pre class="snippet">
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Document&lt;/title&gt;
+  <span class="new">&lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;</span>
+&lt;/head&gt;
+</pre>
+	    
+
+	  </p>
+	</li>
+	
+      </ol>
+    </p>
+
+
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="first-technique">03. Our first browser extension technique: modifying CSS properties</h3>
+
+    <p>
+      Today let&apos;s look at one very simple technique to modify the
+      web page being displayed to the user by adding a thin red border
+      to each element.
+    </p>
+    <p>
+      The starting point of the <code class="cli">content.js</code>
+      file in your extension code should look like this:
+    </p>
+    <pre>
+var elements = document.getElementsByTagName('p');
+
+for (var i = 0; i &lt; elements.length; i++) {
+   var element = elements[i];
+}
+</pre>
+
+    <p>
+      What that code does is <strong>select</strong> (or
+      &quot;<strong>target</strong>&quot;)
+      every <code>&lt;p&gt;</code> tag on the page, and save those
+      into a <strong>list</strong> in a variable that this code
+      calls <code>elements</code>. (This is an arbitrary name and not
+      a keyword. We could have called this
+      variable <code>spaghetti</code>.) Then the
+      code <strong>loops</strong> over each item in this list, and for
+      each one, runs some code. To start, that code did nothing. It
+      simple accessed each item of the list in turn and assigned it a
+      variable called <code>element</code>. (Again, an arbitrary
+      name.) Now let&apos;s see how we can do something with that.      
+    </p>
+
+    <p>
+      The <strong>object</strong> called <code>element</code> has some
+      properties and functions we can access. One of these is
+      called <strong>style</strong>, which represents all the CSS
+      properties that have been assigned to this element. (We&apos;ll
+      talk more about CSS next week.)
+    </p>
+    <p>
+      There is a function called <code>setProperty()</code> that we
+      can use to modify these CSS properties. To start, let&apos;s set
+      a red border on each <code>&lt;p&gt;</code> element. That code
+      would look like this:
+    </p>
+    <pre>
+var elements = document.getElementsByTagName('p');
+
+for (var i = 0; i &lt; elements.length; i++) {
+   var element = elements[i];
+
+   <span class="new">element.style.setProperty('border','solid 1px red');</span>
+
+}
+</pre>
+
+    <p>
+      (Throughout my class notes this semester, when working through a
+      coding example, I will indicate new code <span class="new">in
+      blue with a box underline</span>. I will indicate modified
+      code <span class="changed">in orange with a thin
+      underline</span>. If I can ever make these styles more visible
+      or accessible to you, please don&apos;t hesitate to ask.)
+    </p>
+    <p>
+      Now if you save this code and reload your browser extenstion,
+      you should see a thin read border on any web page that you
+      visit.
+    </p>
+
+
+    <p>
+      If you ever get sick of this behavior, remember that you can
+      always go back to the Extension Manager page
+      (<code>chrome://extensions</code>) and flip the switch to turn
+      this extension off.
+    </p>
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="while-loop">03.a. Two loop styles: <code>for</code> and <code>while</code></h4>
+
+
+    <p>
+      In class we talked about that <code>for</code> loop syntax and
+      tried to unpack exactly what is going on there. I explained that
+      for some folks it might be easier to conceptualize the
+      iterating, repeating behavior of a loop by examining a different
+      syntax which is functionality equivalent: the <code>while</code>
+      loop. Re-writing the above example using a <code>while</code>
+      loop would look like this:
+    </p>
+    <pre>
+var i = 0;
+while (i &lt; elements.length) {
+   var element = elements[i];
+
+   element.style.setProperty("border","solid 1px red");
+   i = i + 1;
+}
+</pre>
+
+    <p>
+      Note how all the same syntax elements are there: <code>var i =
+      0</code>, <code>i &lt; elements.length</code>, and <code>i = i
+      +n 1</code> (which is the same as <code>i++</code>) but arranged
+      in code slightly differently.
+    </p>
+    <p>
+      Personally I find <code>while</code> loops much clearer to
+      read. You can step through it from top to bottom and see how the
+      code will create a new temporary variable <code>i</code>, set it
+      to an initial value (<code>0</code>), then as long as that
+      condition is true (<code>while</code> it is true), repeat the
+      code inside that <strong>block</strong> (in between the curly
+      braces <code>{ }</code>). Within that block, some code is run,
+      and each time, the temporary variable is increased
+      by <code>1</code>, meaning that eventually the looping condition
+      (<code>i &lt; elements.length</code> will no longer be true and the
+      loop will stop repeating.
+    </p>
+    <p>
+      You can use whichever form of loop you wish this
+      semester. Advanced programmers tend to prefer the compactness
+      of <code>for</code> loops, but beginners tend to prefer the
+      clarity of <code>while</code>.
+    </p>
+
+
+    
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="more-advanced-css-randomness">03.b. More advanced CSS techniques with randomness</h4>
+
+    <p>
+      An additional technique for how you can use randomized values to
+      modify CSS properties follows.
+    </p>
+
+    <p>
+      We started working wtih random numbers by looking at this
+      JavaScript expression:
+      <pre>
+Math.random()
+</pre>
+      This generates a random number between 0 and 1. Digital color is
+      usually specified as R, G, and B components, where each
+      component is specified as a number between 0 and 255 (that comes
+      out of the history of using 8 bits to store color). 
+    </p>
+    <p>
+      How can you take a random variable between 0 and 1 and map that
+      into the range of 0 to 255? ... After discussing this for a bit
+      we realized that the answer is to multiply, in this case
+      multiply by 255. Since color values should also be integers, we
+      also want to round the results of that calculation. So
+      generating a random integer between 0 and 255 would look like
+      this:
+      <pre>
+Math.round(Math.random()*255)
+</pre>
+    </p>
+    <p>
+      Let&apos;s set that to a variable, and do that three times: once
+      for each color component:
+      <pre>
+r = Math.round(Math.random()*255);
+g = Math.round(Math.random()*255);
+b = Math.round(Math.random()*255);
+</pre>
+    </p>
+    <p>
+      As a CSS property, RGB color is set with a string that looks
+      like this: <code>&quot;rgb(255,255,255)&quot; </code>
+    </p>
+    <p>
+      Using the <code>+</code> operator as string concatenation would
+look like this:
+      <pre>
+var c = "rgb(" + r + "," + g + "," + b + ")";
+</pre>
+    </p>
+    <p>
+      Let&apos;s use this example to practice working with
+      the <code>while</code> loop syntax that I explained in the
+      previous section.  Putting that altogether will look like this:
+<pre>
+var elements = document.getElementsByTagName("p");
+
+var i = 0;
+while (i &lt; elements.length) {
+   var element = elements[i];
+
+   element.style.setProperty(&quot;border&quot;,&quot;solid 5px red&quot;);
+
+   <span class="new">r = Math.round(Math.random()*255);</span>
+   <span class="new">g = Math.round(Math.random()*255);</span>
+   <span class="new">b = Math.round(Math.random()*255);</span>
+
+   <span class="new">// Color in CSS looks like this: rgb(255,255,255)</span>
+   <span class="new">var c = &quot;rgb(&quot; + r + &quot;,&quot; + g + &quot;,&quot; + b + &quot;)&quot;;</span>
+
+   element.style.setProperty(&quot;background-color&quot;, <span class="changed">c</span>);
+
+   i = i + 1;
+}
+</pre>
+    </p>
+
+
+
+
+
+
+    
+
+
+
+
+
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="debugging">04. Debugging techniques</h3>
+
+    <p>
+      Let&apos;s think about debugging two kinds of code
+      problems: <strong>load-time errors</strong>, which can include
+      things like <strong>syntax errors</strong>, and <strong>run-time
+      errors</strong>, which occur when code is valid but not
+      performing as intended.
+    </p>
+
+
+
+
+
+    <h4 id="debugging-extension-manager">04.a. Using the extension manager (load-time errors)</h4>
+
+    <p>
+      Let&apos;s say you inadvertently make a syntax error. For
+      example, say you type the wrong name for a JavaScript
+      command. Maybe your code would look something like this:
+    </p>
+    <pre>
+var elements = document.<span class="changed">foobar</span>("p");
+
+var i = 0;
+while (i &lt; elements.length) {
+   var element = elements[i];
+
+   element.style.setProperty("border","solid 5px red");
+
+   i = i + 1;
+}
+</pre>
+    <p>
+      Obviously this is not a valid JavaScript function (the one I
+      probably had in mind in this case
+      was <code>getElementsByTagName()</code>). If I save this code
+      and try to reload it in the Extensions Manager, at first
+      everything would seem fine. But if I try to reload any other
+      webpage that would activate the extension code, a button will
+      appear in the Extensions Manager saying "Error."
+    </p>
+
+    <div class="image" style="width: 300px;">
+      <img style="width: 300px;" src="images/project1-1 - debug extension manager.png" />
+    </div>
+
+    <p>
+      Clicking that button gives me some great debugging information,
+      which usually includes the file and even specific line number
+      that has a problem:
+    </p>
+
+    <div class="image">
+      <img src="images/project1-1 - debug extension manager 2.png" />
+    </div>
+
+    <p>
+      After trying to fix the problem, you can reload the extension
+      and try to reload the page. But before you do that, you should
+      clear the error message, either by clicking the trashcan icon or
+      the "Clear all" button. Reloading the extension does not
+      automatically clear these errors, so skipping this step means
+      that when you try to reload the page, you may still see errors,
+      but these would be "leftover" from the previous load ... which
+      can be very confusing!
+    </p>
+
+    
+    
+    <h4 id="debugging-console">04.b. Using the console (run-time errors)</h4>
+    <p>
+      The above technique is good for tracking down problems
+      with <strong>syntax</strong>, which we call <strong>load-time
+      errors</strong>. But what if your syntax is fine but you have a
+      problem with the behavior of code that is operational? These are
+      what we call
+      <strong>run-time errors</strong>. To track these down
+      you&apos;ll need some other techniques.
+    </p>
+
+    <p>
+      Let&apos;s say you were working on a project and made a mistake
+      in your HTML tag name, ending up with something like this:
+      <pre>
+var elements = document.getElementsByTagName("<span class="changed">foobar</span>");
+</pre>
+      This code would load just fine but would probably causie your
+      code to not perform as expected. If you were encountering
+      incorrect behavior and weren&apos;t sure why, you might want to
+      start by adding the following line to print out the contents of
+      that variable to the <strong>console</strong>:
+
+    <pre>
+var elements = document.getElementsByTagName("<span class="changed">foobar</span>");
+
+<span class="new">console.log(elements);</span>
+</pre>
+    </p>
+    <p>
+      Now, you can open up your browser&apos;s developer tools,
+      click <code class="cli">console</code>, and reload your page to
+      look for your printout.
+    </p>
+    <div class="image">
+      <img src="images/project1-1 - debug-console.png" />
+    </div>
+    <p>
+      Examining that, hopefully you might realize that your code was
+      not matching any HTML tags, causing the <code>elements</code>
+      list to come back empty.
+    </p>
+
+
+
+
+
+    
+
+
+
+
+
+    
+<!--    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3><a name="technique-modifying-css">04. Modifying CSS properties with an extension</a></h3>
+
+    <p>
+      We saw a simple version of this last week (adding a red border
+      to all &lt;p&gt; tags). Today let's try something else.
+    </p>
+
+    <p>
+      Let's walk through an
+      example. Rename <code class="cli">content.js</code>
+      to <code class="cli">tutorial1-content.js</code>. Create a new
+      file
+      called <code class="cli">tutorial2-content.js</code>. Modify <code class="cli">manifest.json</code>
+      to specify this filename in the <code>js</code> field
+      of <code>content_scripts</code>.
+    </p>
+    <pre>
+// Tutorial 2, content.js
+
+// Technique 1
+for (e of document.getElementsByTagName('*')) {
+    var c = "rgb(" + Math.floor(Math.random()*255)
+             + "," + Math.floor(Math.random()*255)
+             + "," + Math.floor(Math.random()*255) + ")"
+
+    // For testing:
+    //console.log(e);
+
+    e.style.setProperty('background-color',c);
+}
+</pre>
+
+    <p>
+      Similar to last week's tutorial, this code snippet uses
+      <code>getElementsByTagName()</code>, which returns a list of all
+      the elements in an HTML document that match the tag
+      specified. Last week we said
+      <code>getElementsByTagName('p')</code> to retrieve a list of
+      all <code>&lt;p&gt;</code> elements in the document. In the code
+      snippet here, we're saying
+      <code>getElementsByTagName('*')</code>, which just returns
+      <em>all</em> HTML tags from the document.
+    </p>
+
+    <p>
+      The next line <code>for (e of
+      document.getElementsByTagName('*')) {</code> creates
+      a <strong>loop</strong>, which iterates over all the items in
+      the list returned by <code>getElementsByTagName()</code>. The
+      code <strong>inside</strong> the loop gets run on each item in
+      the list. In other words, the code in between the curly
+      braces <code>{ }</code> in the above example gets invoked, once
+      per HTML element. Each time it gets invokved, the
+      variable <code>e</code> is set to be each successive item in the
+      list.
+    </p>
+    <p>
+      The last line (<code>e.style.setProperty()</code>) sets a CSS
+      property (in this case <code>background-color</code>) on an HTML
+      element. Which element? The one indicated by the
+      variable <code>e</code>. And which one is that? The
+      variable <code>e</code> is set to each element in the document,
+      every single one, taken one at a time.
+    </p>
+
+    <p>
+      So what this code does is randomly generate an RGB color, by
+      creating a <strong>string</strong> that looks something
+      like: <code>rgb(155,155,255)</code>, then sets that RGB color
+      string as the value for the CSS
+      property <code>background-color</code>.
+    </p>
+    <p>
+      Remember to save all your code files and to reload the extension
+      in the extensions manager
+      (<code>chrome://extensions</code>). Then reload a web page and
+      see what this looks like.
+    </p>
+-->
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3><a name="technique-search-replace">05. Extension technique: Search-and-replace text to modify page content</a></h3>
+
+
+    <p>
+      Let&apos;s look at a new browser extension technique that can
+      modify page content beyond just modifying CSS properties.
+    </p>
+
+    <p>
+      To start, rename <code class="cli">content.js</code>
+      to <code class="cli">content-tutorial1.js</code>. Create a new
+      file called <br/>
+      <code class="cli">content-tutorial2-04.js</code> (since we are
+      working on part 04 of this
+      tutorial). Modify <code class="cli">manifest.json</code> to
+      specify this filename in the <code>js</code> field
+      of <code>content_scripts</code>.
+    </p>
+    
+
+    <p>
+      Let&apos;s pause for a moment and think about how we might
+      implement text replacement ...
+    </p>
+    <p>
+      We might think that it should be as simple as replacing all
+      instances of a word or phrase with another word or phrase within
+      the entire textual content of the HTML page.
+    </p>
+    <p>
+      However, we can't simply do that in an HTML file because it
+      could mess with the structure of the code. It could
+      inadvertently replace HTML tags, alter CSS classes, or otherwise
+      just do things we don't want. (Of course, if you're interested
+      in intentionally breaking and glitching things, perhaps this may
+      be an effect that you're interested in. What if you
+      search-and-replaced all instances of one tag with another for
+      example? Or swapped CSS classes just to see what you'd get ...)
+    </p>
+
+    <p>
+      For the technique I want to demonstrate today, we only want to
+      do search-and-replace within the <strong>text nodes</strong> of
+      the <strong>DOM</strong>. Remember this?
+    </p>
+
+
+    <div style="width: 600px; margin: 0 auto; text-align: center;">
+      <img src="images/project1-1 - HTML DOM gritty-tree.png" style="width: 600px; border: solid 1px #000;"/>
+      <em>
+	Remember this from last week? The internal DOM tree structure
+	of this HTML snippet.
+      </em>
+    </div>
+
+
+    <p>
+      Let's step through this example:
+    </p>
+    
+    <pre>
+var html = document.querySelector('html');
+var walker = document.createTreeWalker(html, NodeFilter.SHOW_TEXT);
+var node;
+while (node = walker.nextNode()) {
+    node.nodeValue = node.nodeValue.replace(/<span class="changed">SEARCH</span>/gi, '<span class="changed">REPLACE</span>');
+}
+</pre>
+
+    <p>
+      Replace the orange <code class="changed">SEARCH</code> text with
+      the word or phrase that you want to search <em>for</em> (make
+      sure you include the forward slashes <code>/</code> before and
+      after), and replace the
+      orange <code class="changed">REPLACE</code> text with the word
+      or phrase that you want to swap in (making sure you include the
+      single quotes <code>'</code> on either side).
+    </p>
+    
+    <p>
+      Documentation
+      for <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector">querySelector()</a>
+    </p>
+    <p>
+      Documentation
+      for <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/createTreeWalker">createTreeWalker()</a>
+    </p>
+    <p>
+      The forward slashes <code>/ /</code> indicate that this argument
+      is something called a <strong>regular expression</strong>. This
+      is a special string used to match, search, and replace other
+      string patterns. <strong>Regular expressions</strong> are a
+      powerful idea in computer science and the basis of much text and
+      language processing. This is a very simple regular expression
+      that just searches for any text that matches the word or phrase
+      between forward slashes. The <code>gi</code> at the end stands
+      for "global" and "insensitive", meaning that this will match all
+      instances of this pattern (sometimes regular expressions will
+      find the first match and then stop) and it will match in a case
+      insensitive manner (by default regular expressions are case
+      sensitive). You can read more about regular expressions in the
+      Mozilla documentation here:
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">Regular
+      expressions</a>
+    </p>
+
+
+
+
+
+
+
+
+
+    
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="technique-highlighting-text">06. Extension technique: Highlighting text</h3>
+
+    <p>
+      The above example only modifies the textual content of some HTML
+      tags. What if we wanted to modify the actual HTML itself? This
+      is almost the same approach, but with some slight
+      adjustments. As an example, let&apos;s look at how we could add
+      some highlighting to certain phrases.
+      
+      </p>
+      <p>
+	To start, let&apos;s again create a new JavaScript file. This
+	time let&apos;s call it <br/>
+	<code class="cli">content-tutorial2-05.js</code> (since
+	we&apos;re now working on part
+	05). Modify <code class="cli">manifest.json</code> to specify
+	this filename in the <code>js</code> field
+	of <code>content_scripts</code>.
+    </p>
+
+    </p>
+
+    <pre>
+var html = document.querySelector('html');
+var walker = document.createTreeWalker(html, NodeFilter.SHOW_TEXT);
+var node;
+
+while (node = walker.nextNode()) {
+
+  if ( node.nodeValue.includes("<span class="changed">paragraph</span>") ) {
+    newNodeValue = node.nodeValue.replace(/<span class="changed">paragraph</span>/gi,"&lt;span style='<span class="new">border: solid 1px red</span>;'&gt;<span class="changed">paragraph</span>&lt;/span&gt;");
+    newElement = document.createElement("template");
+    newElement.innerHTML = newNodeValue;
+    node.before(newElement.content);
+    oldNode = node;
+    node = walker.nextNode();
+    oldNode.remove();
+  }
+}
+</pre>
+
+    <p>
+      Change the <span class="changed">orange words</span> above to be
+      whatever word or phrase you want to highlight. And change
+      the <span class="new">blue text</span> above to be any other CSS
+      styling that you'd like to use to highlight that word or
+      phrase. For example, you could try this to style it as a
+      traditional <span class="highlight">yellow highlight</span>:
+    </p>
+
+    <pre class="css">
+background-color: yellow;
+</pre>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <div class="horizontal-rule"></div>
+    <script type="text/JavaScript">
+      datUpdated = new Date(document.lastModified) ;
+      document.write("Last Updated: " + datUpdated);
+    </script>
+
+    </div>
+
+</body>
+
+</html>
+
