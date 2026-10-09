@@ -137,6 +137,11 @@
       <li>
 	<a href="#technique-highlighting-text">Extension technique: Highlighting text</a>
       </li>
+      <li>
+	<a href="#homework-and-notebook">Homework &amp; lab notebook
+	entries</a> [<span class="highlight"><strong>Added after
+	class</strong></span>]
+      </li>
     </ol>
 
 
@@ -144,16 +149,20 @@
 
 
 
-    <div class="image">
-      <a href="images/project1-3 - KYTNTOUR_McClure_Glasgow_CCA_4_BM.jpg">
-	<img src="images/project1-3 - KYTNTOUR_McClure_Glasgow_CCA_4_BM.jpg" />
-      </a>
-      <em>Avant garde filmmaker Bruce McLure would often work by
-      modifying the projector (rather than the film strip) to create
-      experimental results. Could we think of this as similar to CSS,
-      in that it modifies the presentation of a cultural object rather
-      than its underlying structure? eh, maybe ... (Click to
-      enlarge.)</em>
+    <div class="image" style="width: 80%;">
+      <div style="width: 100%;">
+	<a href="images/project1-3 - KYTNTOUR_McClure_Glasgow_CCA_4_BM.jpg">
+	  <img src="images/project1-3 - KYTNTOUR_McClure_Glasgow_CCA_4_BM.jpg" style="width: 100%;" />
+	</a>
+      </div>
+      <div style="width: 100%;">
+	<em>Avant garde filmmaker Bruce McLure would often work by
+	  modifying the projector (rather than the film strip) to
+	  create experimental results. Could we think of this as
+	  similar to CSS, in that it modifies the presentation of a
+	  cultural object rather than its underlying structure?
+	  Maybe ... (Click to enlarge.)</em>
+      </div>
     </div>
 
     
@@ -184,33 +193,64 @@ for (var i = 0; i &lt; elements.length; i++) {
 </pre>
 
     <p>
-      What that code does is <strong>select</strong> (or
+      In JavaScript we create new <strong>variables</strong> with the
+      keyword <code>var</code>. A <strong>variable</strong> is a word
+      like a placeholder that holds a value, like from algebra. We can
+      assign values to variables and change those values
+      with <code>=</code>, which is referred to as
+      the <strong>assignment operator</strong>. <code>elements</code>
+      is an arbitrary name and not a keyword. We could have called
+      this
+      <strong>variable</strong> <code>spaghetti</code>.
+    </p>
+    <p>
+      What this code does is <strong>select</strong> (or
       &quot;<strong>target</strong>&quot;)
       every <code>&lt;p&gt;</code> tag on the page, and save those
-      into a <strong>list</strong> in a variable that this code
-      calls <code>elements</code>. (This is an arbitrary name and not
-      a keyword. We could have called this
-      variable <code>spaghetti</code>.) Then the
-      code <strong>loops</strong> over each item in this list, and for
-      each one, runs some code. To start, that code did nothing. It
-      simple accessed each item of the list in turn and assigned it a
-      variable called <code>element</code>. (Again, an arbitrary
-      name.) Now let&apos;s see how we can do something with that.      
+      tags into a <strong>list</strong>. This code uses
+      the <strong>variable</strong> <code>elements</code> to hold that
+      list.
+    </p>
+    <p>
+      The code then <strong>loops</strong> over each item in this
+      list, and for each item, it runs some code. Right now, that code
+      does nothing. It simply accesses each item of the list in turn
+      and assigns it to another <strong>variable</strong>
+      called <code>element</code>. (Again, an arbitrary name.) Now
+      let&apos;s see how we can do something with that ...
     </p>
 
     <p>
-      The <strong>object</strong> called <code>element</code> has some
-      properties and functions we can access. One of these is
-      called <strong>style</strong>, which represents all the CSS
-      properties that have been assigned to this element. (We&apos;ll
-      talk more about CSS next week.)
+      In JavaScript terminology, we say that the value of
+      <code>element</code> is an <strong>object</strong>. An
+      <strong>object</strong> is a coding construct that has some
+      <strong>properties</strong> and <strong>functions</strong> that
+      we can access. We access these various things
+      with <code>.</code>, known as <strong>dot</strong>
+      or <strong>dot notation</strong>.
     </p>
     <p>
-      There is a function called <code>setProperty()</code> that we
-      can use to modify these CSS properties. To start, let&apos;s set
-      a red border on each <code>&lt;p&gt;</code> element. That code
-      would look like this:
+      One of the properties of the tag <strong>object</strong> being
+      held in <code>element</code> is a property
+      called <strong>style</strong>. This represents all the CSS
+      properties that have been assigned to this element.
     </p>
+    <p>
+      There is also a function called <code>setProperty()</code> that
+      we can use to modify these CSS properties. To start, let&apos;s
+      set a red border on each <code>&lt;p&gt;</code> element. That
+      code would look like this:
+    </p>
+    <div class="new-changed" style="width: 70%; float: right; ">
+      (Throughout my class notes this semester, when working through a
+      coding example, I will indicate new code <span class="new">in
+	blue with a box underline</span>. I will indicate modified
+      code <span class="changed">in orange with a thin
+	underline</span>. If I can ever make these styles more visible
+      or accessible to you, please don&apos;t hesitate to ask.)
+    </div>
+    <div style="clear: both;">&nbsp;</div>
+
     <pre>
 var elements = document.getElementsByTagName('p');
 
@@ -223,12 +263,6 @@ for (var i = 0; i &lt; elements.length; i++) {
 </pre>
 
     <p>
-      (Throughout my class notes this semester, when working through a
-      coding example, I will indicate new code <span class="new">in
-      blue with a box underline</span>. I will indicate modified
-      code <span class="changed">in orange with a thin
-      underline</span>. If I can ever make these styles more visible
-      or accessible to you, please don&apos;t hesitate to ask.)
     </p>
     <p>
       Now if you save this code and reload your browser extenstion,
@@ -614,14 +648,13 @@ for (e of document.getElementsByTagName('*')) {
     </p>
 
     <p>
-      To start, rename <code class="cli">content.js</code>
-      to <code class="cli">content-tutorial1.js</code>. Create a new
+      To start, rename <code class="cli">content.js</code> to
+      <code class="cli">content-tutorial3-01.js</code>. Create a new
       file called <br/>
-      <code class="cli">content-tutorial2-04.js</code> (since we are
-      working on part 04 of this
-      tutorial). Modify <code class="cli">manifest.json</code> to
-      specify this filename in the <code>js</code> field
-      of <code>content_scripts</code>.
+      <code class="cli">content-tutorial3-03.js</code> (since we are
+      working on part 03 of this tutorial). Modify
+      <code class="cli">manifest.json</code> to specify this filename
+      in the <code>js</code> field of <code>content_scripts</code>.
     </p>
     
 
@@ -735,9 +768,9 @@ while (node = walker.nextNode()) {
       <p>
 	To start, let&apos;s again create a new JavaScript file. This
 	time let&apos;s call it <br/>
-	<code class="cli">content-tutorial2-05.js</code> (since
+	<code class="cli">content-tutorial3-04.js</code> (since
 	we&apos;re now working on part
-	05). Modify <code class="cli">manifest.json</code> to specify
+	04). Modify <code class="cli">manifest.json</code> to specify
 	this filename in the <code>js</code> field
 	of <code>content_scripts</code>.
     </p>
@@ -775,9 +808,59 @@ while (node = walker.nextNode()) {
     <pre class="css">
 background-color: yellow;
 </pre>
-    
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="homework-and-notebook">05. Homework &amp; lab notebook entries</h3>
+
+    <p>
+      In class today we got through <a href="#first-technique">section
+      01</a>. For homework, please try to work through sections 03 and
+      04 above on your own.
+    </p>
+    <p>
+      It may be a little challenging, but the explanations above are
+      very detailed. If you read through carefully I think you should
+      be able to at least make some progress on your own experimenting
+      with these two techniques.
+    </p>
+    <p>
+      Try to get each technique working. Use your lab notebook entry
+      for this tutorial to discuss your work, including any errors or
+      blockages you encountered, as well as comments on any successes,
+      and what results they produced.
+    </p>
+    <p>
+      After completing this tutorial you should have three <strong>content
+	script</strong> files in your project folder:
+      <ul>
+	<li>
+	  &mdash; <code>content-tutorial3-01.js</code>
+	</li>
+	<li>
+	  &mdash; <code>content-tutorial3-03.js</code>
+	</li>
+	<li>
+	  &mdash; <code>content-tutorial3-04.js</code>
+	</li>
+      </ul>
+      and notes in your lab notebook entry explaining this work.
+    </p>
 
 
 

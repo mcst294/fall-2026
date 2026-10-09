@@ -98,7 +98,7 @@ ol.table-of-contents ol {
 div.image {
     width: 600px;
     margin: 0 auto 20px;
-    text-align: center;
+    /*text-align: center;*/
 }
 div.image img {
     width: 600px;
