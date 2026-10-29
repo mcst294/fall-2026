@@ -134,13 +134,18 @@
       <li>
 	<a href="#technique-search-replace">Extension technique: Search-and-replace text to modify page content</a>
       </li>
+      <ol class="contents-sublist" >
+	<li>
+	  <a href="#fixing-search-replace">Debugging a problem with search-and-replace</a> [<span class="highlight"><strong>Added after class, Oct 22</strong></span>]
+	</li>
+      </ol>
       <li>
 	<a href="#technique-highlighting-text">Extension technique: Highlighting text</a>
       </li>
       <li>
 	<a href="#homework-and-notebook">Homework &amp; lab notebook
 	entries</a> [<span class="highlight"><strong>Added after
-	class</strong></span>]
+	class, Oct 8</strong></span>]
       </li>
     </ol>
 
@@ -749,6 +754,50 @@ while (node = walker.nextNode()) {
 
 
 
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="fixing-search-replace">03.a Debugging a problem with search-and-replace</h4>
+
+    <p>
+      During class on Thursday, some students were noticing a problem
+      in which search-and-replace was completely breaking some
+      pages. This section was added based on the work we did in class
+      together to fix that.
+    </p>
+
+    <p>
+      The problem is that some pages have lots of code embedded in
+      them, as JavaScript or CSS. The above code snippet was intended
+      to only look for text nodes, which we hoped would return only
+      nodes with text that the user could see in the browser. But
+      unfortunately, that code was also returning some of these code
+      nodes, thinking they were text. 
+    </p>
+    <p>
+      The solution is to explicltly filter out JavaScript and CSS from
+      our tree walker. The code to do that is below
+      (with new stuff added <span class="new">in blue</span>):
+    </p>
+    <pre>
+var html = document.querySelector(&apos;html&apos;);
+var walker = document.createTreeWalker(html, NodeFilter.SHOW_TEXT<span class="new">, // note the comma here</span>
+    <span class="new">{</span>
+    <span class="new">acceptNode: (node) => {</span>
+      <span class="new">if (node.parentNode.nodeName === 'SCRIPT' || node.parentNode.nodeName === 'STYLE') {</span>
+        <span class="new">return NodeFilter.FILTER_REJECT;</span>
+      <span class="new">}</span>
+      <span class="new">return NodeFilter.FILTER_ACCEPT;</span>
+    <span class="new">}</span>
+<span class="new">}</span>);
+var node;
+while (node = walker.nextNode()) {
+    node.nodeValue = node.nodeValue.replace(/SEARCH/gi, &apos;REPLACE&apos;);
+}
+</pre>
+    
+
+
+
+
 
 
 
@@ -810,7 +859,28 @@ background-color: yellow;
 </pre>
 
 
+    <p>
+      Please note that if you want to update the above code snippet to
+      fix the problem described
+      in <a href="#fixing-search-replace">section 03.a</a>, you will
+      have to include the code snippet that I added there. So it would
+      look like this:
+    </p>
 
+    <pre>
+var walker = document.createTreeWalker(html, NodeFilter.SHOW_TEXT,
+    {
+    acceptNode: (node) => {
+      if (node.parentNode.nodeName === 'SCRIPT' || node.parentNode.nodeName === 'STYLE') {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    }
+}
+);
+</pre>
+
+    
 
 
 

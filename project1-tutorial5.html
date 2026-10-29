@@ -1,0 +1,703 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>Radical Software, Spring 2026: Project 1, Tutorial 5</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+
+<body>
+
+  <div class="main">
+
+    <p class="nav">
+      <a href="index.html">Home</a> | <a href="schedule.html">Schedule &amp; Readings</a> | <a href="resources.html">Links &amp; Resources</a>
+    </p>
+
+    <p style="float: right;">
+      [ Links open in: <span id="window-same" class="selected">same window</span> | <span id="window-new">new window</span> ]
+    </p>
+    
+    <div class="horizontal-rule"></div>
+
+    <h1>Radical Software</h1>
+    <p>
+      MCST 294-02 / COMP 194-03, Fall 2026<br/>
+      Rory Solomon <br />
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h2>Project 1, Tutorial 5: Some additional techniques</h2>
+
+    <p>
+
+    </p>
+
+
+    <p>
+      Some additional code snippets and techniques:
+    </p>
+
+    <ol class="table-of-contents" id="table-of-contents">
+      <li>
+	<a href="#options-formatting">Options page formatting</a>
+      </li>
+      <li>
+	<a href="#popups">Modifying HTML</a>, can be used to create "popup" effects
+      </li>
+      <li>
+	<a href="#jquery">Dynamic page modification with jQuery (<em>work in progress!</em></a>
+      </li>
+
+    </ol>
+
+
+
+    
+
+
+
+
+
+
+
+    
+    <h3 id="options-formatting">01. Options page formatting</h3>
+
+    <p>
+      Several people were planning to add more to their options page
+      by adding additional input fields. We didn't talk about how to
+      format those nicely so I wanted to give an example of how to do
+      that.
+    </p>
+
+    <p>
+      At the very least, if you want your
+      various <code>&lt;input&gt;</code> elements to appear each on
+      their own line, you could enclose each inside
+      a <code>&lt;p&gt;</code> tag. So building on where we left off
+      with <code class="cli">options.html</code>, you might add those
+      tags with the file looking like this:
+    </p>
+
+    <p class="figure" id="hw-start">
+      Modifying options.html:
+    </p>
+    <pre class="snippet">
+&lt;body&gt;
+  &lt;div>
+    <span class="new">&lt;p&gt;</span>
+      From text: &lt;input id="fromField" type="text" /&gt;
+    <span class="new">&lt;/p&gt;</span>
+    <span class="new">&lt;p&gt;</span>
+      To text: &lt;input id="toField" type="text" /&gt;
+    <span class="new">&lt;/p&gt;</span>
+    &lt;button type="button" id="button"&gt;Set text&lt;/button&gt;
+    &lt;button type="button" id="clear"&gt;Clear text&lt;/button>
+  &lt;/div&gt;
+&lt;/body>
+</pre>
+
+    <p>
+      Next, if you want to have more elements on the page and you want
+      to control their placement and spacing, you could include
+      groupings of HTML elements in <code>&lt;div&gt;</code>
+      elements. Like this:
+    </p>
+
+    <p class="figure" id="hw-start">
+      Further modifying options.html:
+    </p>
+    <pre class="snippet">
+&lt;body&gt;
+  &lt;div&gt;
+    <span class="new">&lt;div&gt;</span>
+      &lt;p&gt;
+        From text <span class="changed">1</span>: &lt;input id="fromField<span class="changed">1</span>" type="text" /&gt;
+      &lt;/p&gt;
+      &lt;p&gt;
+        To text <span class="changed">1</span>: &lt;input id="toField<span class="changed">1</span>" type="text" /&gt;
+      &lt;/p&gt;
+    <span class="new">&lt;/div&gt;</span>
+
+    <span class="new">&lt;div&gt;</span>
+      <span class="new">&lt;p&gt;</span>
+        <span class="new">From text 2: &lt;input id="fromField2" type="text" /&gt;</span>
+      <span class="new">&lt;/p&gt;</span>
+      <span class="new">&lt;p&gt;</span>
+        <span class="new">To text 2: &lt;input id="toField2" type="text" /&gt;</span>
+      <span class="new">&lt;/p&gt;</span>
+    <span class="new">&lt;/div&gt;</span>
+
+    &lt;button type="button" id="button"&gt;Set text&lt;/button&gt;
+    &lt;button type="button" id="clear"&gt;Clear text&lt;/button>
+  &lt;/div&gt;
+&lt;/body>
+</pre>
+
+    <p>
+      Note that I have changed the <code>id</code> attributes for my
+      HTML <code>&lt;input&gt;</code> elements here. If you do this,
+      you'll need to go through your extenions
+      (your <code class="cli">options.js</code> file, and your content
+      scripts) and change any references to these
+      fields. So <code>fromField</code> should
+      become <code>fromField1</code>, etc. You should then push this
+      through so that all those fields end with <code>...1</code>, and
+      if you want to access the other fields, they'll all end
+      with <code>...2</code> etc. After making the JS changes that
+      correspond to the above HTML
+      changes, <code class="cli">options.js</code> would look like
+      this:
+    </p>
+    <p class="figure">
+      Modifying options.js:
+    </p>
+    <pre>
+let fromTextElement<span class="changed">1</span> = document.getElementById(&apos;fromField<span class="changed">1</span>&apos;);
+let toTextElement<span class="changed">1</span> = document.getElementById(&apos;toField<span class="changed">1</span>&apos;);
+<span class="new">let fromTextElement2 = document.getElementById(&apos;fromField2&apos;);</span>
+<span class="new">let toTextElement2 = document.getElementById(&apos;toField2&apos;);</span>
+let setButtonElement = document.getElementById(&apos;button&apos;);
+let clearButton = document.getElementById(&apos;clear&apos;);
+
+setButtonElement.addEventListener(&apos;click&apos;, function() {
+  chrome.storage.sync.set({
+    fromStored<span class="changed">1</span>: fromTextElement<span class="changed">1</span>.value,
+    toStored<span class="changed">1</span>: toTextElement<span class="changed">1</span>.value,
+    <span class="new">fromStored2: fromTextElement2.value,</span>
+    <span class="new">toStored2: toTextElement2.value</span>
+  });
+});
+
+chrome.storage.sync.get({fromStored<span class="changed">1</span>: &quot;&quot;, toStored<span class="changed">1</span>: &quot;&quot;, fromStored2: &quot;&quot;, toStored2: &quot;&quot;}, function(result) {
+    fromTextElement<span class="changed">1</span>.value = result.fromStored<span class="changed">1</span>;
+    toTextElement<span class="changed">1</span>.value = result.toStored<span class="changed">1</span>;
+    <span class="new">fromTextElement2.value = result.fromStored2;</span>
+    <span class="new">toTextElement2.value = result.toStored2;</span>
+});
+
+clearButton.addEventListener(&apos;click&apos;, function() {
+  chrome.storage.sync.clear();
+  fromTextElement<span class="changed">1</span>.value = &quot;&quot;;
+  toTextElement<span class="changed">1</span>.value = &quot;&quot;;
+  <span class="new">fromTextElement2.value = &quot;&quot;;</span>
+  <span class="new">toTextElement2.value = &quot;&quot;;</span>
+});
+</pre>
+
+    <blockquote>
+      <p>
+	<span class="highlight">UPDATE</span>. In class we talked
+	about how adding an additional search/replace field like that
+	will not have any effect on the behavior of your extension
+	unless you also make corresponding modifications to the
+	content script JavaScript file.
+      </p>
+      <p>
+	Going in the content script that we were working
+	on <a href="project1-tutorial3.html">last week</a>, you could
+	modify it to use these new form fields like this:
+      </p>
+      <p class="figure">
+	Modifying content-tutorial3.js:
+      </p>
+      <pre>
+chrome.storage.sync.get({fromStored<span class="changed">1</span>: &quot;&quot;, toStored<span class="changed">1</span>: &quot;&quot;<span class="new">,fromStored2: &quot;&quot;, toStored2: &quot;&quot;</span>}, function(result) {
+
+    var html = document.querySelector(&apos;html&apos;);
+    var walker = document.createTreeWalker(html, NodeFilter.SHOW_TEXT);
+    var node;
+    while (node = walker.nextNode()) {
+
+        var re = new RegExp(result.fromStored<span class="changed">1</span>,&quot;gi&quot;)
+        node.nodeValue = node.nodeValue.replace(re, result.toStored<span class="changed">1</span>);
+
+        <span class="new">var re = new RegExp(result.fromStored2,&quot;gi&quot;)</span>
+        <span class="new">node.nodeValue = node.nodeValue.replace(re, result.toStored2);``</span>
+    }
+});
+</pre>
+      
+    </blockquote>
+    
+    <p>
+      Now, if you want to style those <code>&lt;div&gt;</code>s in
+      some way, you can add some CSS to control their appearance. See
+      my comments
+      in <a href="project1-tutorial2.html#attaching-css">Tutorial 2,
+      part 02.a</a> for three different ways of attaching CSS rules to
+      an HTML page. If there is a lot of styling that you want to do
+      to your options page, you should probably use
+      the <strong>external</strong> method of including CSS, as
+      explained in the class notes linked above. Refresher: you put
+      all your CSS rules in a separate CSS file, then link to that CSS
+      file from your HTML file. So, go into 
+      your <code class="cli">options.html</code> file and add this:
+    </p>
+
+    <p class="figure">
+      Modifying options.html:
+    </p>
+    <pre class="snippet">
+&lt;html&gt;
+&lt;head&gt;
+  &lt;script src="options.js" defer&gt;&lt;/script&gt;
+  <span class="new">&lt;link rel="stylesheet" href="css/options.css"&gt;</span>
+&lt;/head&gt;
+&lt;body&gt;
+</pre>
+
+    <p>
+      Then, create a new file in your <code class="cli">css</code>
+      subfolder called <code class="cli">options.css</code> and start
+      to add CSS rules to it. Here is some sample CSS that starts to
+      work on controlling the appearance of
+      this <code class="cli">options.html</code> code:
+    </p>
+
+    <p class="figure">
+      Creating css/options.css:
+    </p>
+    <pre class="css">
+div {
+  width: 250px;
+  border: solid 1px #000;
+  padding: 5px;
+  margin: 5px;
+}
+</pre>
+
+    <p>
+      If you do all that, and click in to your extenion's options
+      page, you should see something that looks like this:
+    </p>
+
+    <div style="width: 300px; margin: 0 auto; text-align: center;">
+      <img src="images/project1-4 - bonus tutorial - options.png" style="width: 300px; border: solid 1px #000;"/>
+    </div>
+
+    <p>
+      If you want to format the different <code>&lt;div&gt;</code>s
+      differently, you can add CSS <strong>classes</strong>, like
+      this:
+    </p>
+
+    <p class="figure">
+      Modifying options.html:
+    </p>
+    <pre class="snippet">
+  &lt;body&gt;
+    &lt;div <span class="new">class="outter"</span>&gt;
+      &lt;div&gt;
+</pre>
+
+    <p>
+      Then modify your CSS file like this, adding a
+      new <strong>rule</strong> to <strong>target</strong> the
+      specific <code>&lt;div&gt;</code> indicated by
+      that <strong>class</strong>:
+    </p>
+
+    <p class="figure">
+      Modifying css/options.css:
+    </p>
+    <pre class="css">
+div {
+  width: 250px;
+  border: solid 1px #000;
+  padding: 5px;
+  margin: 5px;
+}
+
+<span class="new">div.outter {</span>
+  <span class="new">width: 275px;</span>
+  <span class="new">margin: 25px;</span>
+  <span class="new">padding: 10px;</span>
+<span class="new">}</span>
+</pre>
+
+    <p>
+      That should space things out a little better.
+    </p>
+    <p>
+      Then maybe you&apos;d like to add some additional HTML and text
+      to offer some context, explanation, or instructions to your
+      user:
+    </p>
+
+    <p class="figure">
+      Modifying options.html:
+    </p>
+    <pre class="snippet">
+    &lt;div class="outter"&gt;
+      <span class="new">&lt;h1&gt;Rory's Browser Extension Options&lt;/h1&gt;</span>
+      <span class="new">&lt;p&gt;</span>
+        <span class="new">Specify some options here ...</span>
+      <span class="new">&lt;/p&gt;</span>
+      &lt;div&gt;
+</pre>
+
+    <p>
+      If you do all that, you should be able to reload your extension
+      and see something that looks like this:
+    </p>
+
+    <div style="width: 450px; margin: 0 auto; text-align: center;">
+      <img src="images/project1-4 - bonus tutorial - options2.png" style="width: 450px; border: solid 1px #000;"/>
+    </div>
+
+    <p>
+      Hopefully that's enough to get you started exploring further.
+    </p>
+    <p>
+      Remember,
+      the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">Mozilla
+      Developer Network</a> has some great tutorials about other CSS
+      properties you can explore. And you can also use the Chome
+      browser&apos;s <strong>inspect</strong> tool to experiment with
+      different CSS properties and their values.
+    </p>
+
+
+
+
+
+
+    
+
+
+
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="popups">02. Modifying HTML &amp; "popup" effects</h3>
+
+    <p>
+      Another technique people have asked about is how to create
+      "pop-up" like effects. You do this by using Javascript code to
+      add or modify HTML within the current page.
+    </p>
+
+    <p>
+      You can create a "pop-up" effect specifically by adding
+      a <code>&lt;div&gt;</code> to the page, specify its position,
+      dimensions, and appearance, and then when the user clicks
+      somewhere, delete it.
+    </p>
+
+    <p>
+      Let&apos;s start with the technique that we looked at in
+      <a href="project1-tutorial2.html#technique-highlighting-text">Tutorial
+      2, part 05</a>, modified slightly. To start, let&apos;s create a
+      new JS file
+      called <code class="cli">content-tutorial5.js</code>. Don&apos;t
+      forget to modify <code class="cli">manifest.json</code> to point
+      to this new file:
+      <pre class="snippet">
+  &quot;content_scripts&quot;: [
+    {
+      &quot;matches&quot;: [
+        &quot;*://*/*&quot;
+      ],
+      &quot;js&quot;: [
+        &quot;<span class="changed">content-tutorial5.js</span>&quot;
+      ],
+      &quot;run_at&quot;: &quot;document_idle&quot;
+    }
+  ],
+</pre>
+      Then add the following code to this new file:
+    </p>
+
+    <p class="figure">
+      Creating content-tutorial5.js:
+    </p>
+    <pre>
+var html = document.querySelector('html');
+var walker = document.createTreeWalker(html, NodeFilter.SHOW_TEXT);
+var node;
+
+while (node = walker.nextNode()) {
+
+  if ( node.nodeValue.includes("paragraph") ) {
+    newNodeValue = node.nodeValue.replace(/paragraph/gi,"<span class="changed">&lt;span class='click-me'&gt;</span>paragraph&lt;/span&gt;");
+    newElement = document.createElement("template");
+    newElement.innerHTML = newNodeValue;
+    node.before(newElement.content);
+    oldNode = node;
+    node = walker.nextNode();
+    oldNode.remove();
+  }
+}
+</pre>
+
+    <p>
+      This is the same as the code snippet
+      from <a href="project1-tutorial2.html#technique-highlighting-text">Tutorial
+      2, part 05</a> except that I've made a change to
+      the <code>&lt;span&gt;</code>. Instead of specifying
+      an <strong>inline</strong> <code>style</code> attribute with CSS
+      rules, it assigns a <strong>CSS class</strong> to that span.
+    </p>
+    <p>
+      The point of using a <strong>CSS class</strong> is that it makes
+      it easier to use Javascript code to <strong>target</strong> all
+      HTML elements that are marked with that class. In other words,
+      using CSS classes, we can write Javascript code that is
+      triggered by some user interaction event on <em>any</em> element
+      with that <strong>CSS class</strong>.
+    </p>
+    <p>
+      So this finds all instances of the word "paragraph" on the page
+      and puts that word in a <code>&lt;span&gt;</code> element with
+      the CSS class <code class="css">click-me</code>. (The
+      word <code class="css">click-me</code> here is not a special
+      keyword in any sense. I could have used any word I'd like.)
+    </p>
+
+
+    <p>
+      This <code>&lt;span&gt;</code> does not have any CSS style rules
+      associated with it, so it will not appear as visible to the user
+      in any way. Let&apos;s add some style rules for this to signal
+      to the user that it is clickable. To add CSS from within a
+      content script, we have to
+      modify <code class="cli">manifest.json</code> like so:
+    </p>
+    <p class="figure">
+      Modifying manifest.json:
+    </p>
+    <pre>
+ &quot;content_scripts&quot;: [
+    {
+      &quot;matches&quot;: [
+        &quot;*://*/*&quot;
+      ],
+      &quot;js&quot;: [
+        &quot;content-tutorial5.js&quot;
+      ],
+      <span class="new">&quot;css&quot;: [</span>
+        <span class="new">&quot;content-tutorial5.css&quot;</span>
+      <span class="new">],</span>
+      &quot;run_at&quot;: &quot;document_idle&quot;
+    }
+  ],
+    </pre>
+    <p>
+      Now, create this
+      file, <code class="cli">content-tutorial5.css</code>, and add
+      something like the following CSS rule to it:
+    </p>
+    <p class="figure">
+      Creating content-tutorial5.css:
+    </p>
+    <pre class="css">
+.click-me {
+  border-bottom: dashed 1px blue;
+}
+</pre>
+    
+    
+    <p>
+      Now, to actually make these elements clickable, I&apos;m going
+      to use
+      <code>document.getElementsByClassName()</code> to select a list
+      of all HTML elements with the <code class="css">click-me</code>
+      class, and then use <code>addEventListener()</code> to add code
+      that responds to a click on each of those words. First
+      let&apos;s add some simple code just to test that the click
+      event handling is working:
+  </p>
+
+        <p class="figure">
+      Adding code to the end of content-tutorial5.js:
+    </p>
+  <pre>
+var clickableWords = document.getElementsByClassName('click-me');
+for (var word of clickableWords) {
+  word.addEventListener('click', function() {
+    alert("An element was clicked!");
+  });
+}
+</pre>
+  <p>
+    Reload the extension, reload the page, and try clicking on one of
+    the underlined elements.
+  </p>
+
+
+  <p>
+    Once you have that working, let&apos;s delete
+    that <code>alert()</code> code, and add code that creates a popup
+    for the user:
+  </p>
+  
+    <p class="figure">
+      Modifying content-tutorial5.js:
+    </p>
+  <pre>
+var clickableWords = document.getElementsByClassName('click-me');
+for (var word of clickableWords) {
+  word.addEventListener('click', function() {
+    <span class="new">var popup = document.createElement("div");</span>
+    <span class="new">popup.style.width = "500px";</span>
+    <span class="new">popup.style.height = "250px";</span>
+    <span class="new">popup.style.border = "solid 1px #000";</span>
+    <span class="new">popup.style.margin = "10px";</span>
+    <span class="new">popup.style.padding = "10px";</span>
+    <span class="new">popup.style.position = "fixed";</span>
+    <span class="new">popup.style.top = "50px";</span>
+    <span class="new">popup.style.left = "50px";</span>
+    <span class="new">popup.style.backgroundColor = "#fff";</span>
+    <span class="new">popup.style.zIndex = "9999";</span>
+    <span class="new">popup.textContent = "Hello this is some sample text.";</span>
+    <span class="new">document.body.insertAdjacentElement("afterbegin",popup);</span>
+  });
+}
+</pre>
+
+    <p>
+      This new code creates a new HTML element, which is
+      a <code>&lt;div&gt;</code>, and which is represented in
+      JavaScript with the <code>popup</code> variable. The other lines
+      are setting CSS properties on <code>popup</code>. You can modify
+      these to control the size, position, and color of
+      the <code>&lt;div&gt;</code> as well as any other CSS
+      properties.  The line that begins <code>popup.textContent</code>
+      sets the text that will be the content of the pop-up.  Finally,
+      the last new line inserts this new HTML element (represented
+      by <code>popup</code>) into the document body.
+    </p>
+
+    <p>
+      Reload the extesion, relead the page, and click an element.
+    </p>
+    <p>
+      But wait! Now we can&apos;t close that pop up. Let&apos;s add
+      some code so that when we <em>create</em> the popup, we are also
+      creating a new <strong>event listener</strong> that listens for
+      a click, and when it receives one, removes this new element:
+    </p>
+
+    <p class="figure">
+      Modifying content-tutorial5.js:
+    </p>
+    <pre>
+var clickableWords = document.getElementsByClassName('click-me');
+for (var word of clickableWords) {
+  word.addEventListener('click', function() {
+    var popup = document.createElement("div");
+    popup.style.width = "500px";
+    popup.style.height = "250px";
+    popup.style.border = "solid 1px #000";
+    popup.style.margin = "10px";
+    popup.style.padding = "10px";
+    popup.style.position = "fixed";
+    popup.style.top = "50px";
+    popup.style.left = "50px";
+    popup.style.backgroundColor = "#fff";
+    popup.style.zIndex = "9999";
+    popup.textContent = "Hello this is some sample text.<span class="new"> (Click anywhere to close.)</span>";
+    document.body.insertAdjacentElement("afterbegin",popup);
+
+    <span class="new">popup.addEventListener('click', function() {</span>
+      <span class="new">popup.remove();</span>
+    <span class="new">});</span>
+  });
+}
+</pre>
+
+
+
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="jquery">03. Dynamic page modification with jQuery (<em>work in progress!</em>)</h3>
+
+
+    <p>
+      1. Download jQuery and put it in your extension folder. Probably a
+      good idea to put it in a subfolder. I will call
+      mine <code>lib</code> (short for "libraries", meaning,
+      third-party code I will be using). Go to the
+      jQuery <a href="https://jquery.com/download/">Download</a>
+      page. I downloaded the "uncompressed development version of
+      jQuery 4.0.0."
+    </p>
+
+    <p>
+      2. Add the following
+      to <code class="cli">manifest.json</code>. I put this
+      between <code>version</code> and <code>content_scripts</code>
+      (for me, that was between lines 5 and 6):
+	<pre>
+  "background": {
+        "scripts": ["lib/jquery-4.0.0.js"]
+  },
+</pre>
+    </p>
+
+    <p>
+      Also inside <code>manifest.json</code>, add the following to
+      the <code>content_scripts</code> field:
+	<pre>
+"content_scripts":
+    [
+        {
+            "matches":["http://website*"],
+            "js":[<span class="new">"lib/jquery-4.0.0.js"</span>, "script.js"],
+            "css": ["css/style.css"],
+            "run_at": "document_end"
+        }
+    ]
+</pre>
+    </p>
+
+
+    <p>
+      3. Refer heavily
+      to <a href="https://learn.jquery.com/">https://learn.jquery.com/</a>. Really
+      great documentation. Maybe my favorite thing about this library.
+    </p>
+
+    <p>
+      4. 
+    </p>
+
+
+
+
+
+
+
+
+    
+    
+
+    
+    <div class="horizontal-rule"></div>
+    <script type="text/JavaScript">
+      datUpdated = new Date(document.lastModified) ;
+      document.write("Last Updated: " + datUpdated);
+    </script>
+
+    </div>
+
+</body>
+
+</html>
+

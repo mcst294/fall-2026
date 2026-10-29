@@ -1,0 +1,699 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>Radical Software, Fall 2026: Project 1, Tutorial 4</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="js/links.js"></script>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <p class="nav">      
+      <a href="index.html">Home</a> | <a href="schedule.html">Schedule &amp; Readings</a> | <a href="resources.html">Links &amp; Resources</a>
+    </p>
+
+    <p style="float: right;">
+      [ Links open in: <span id="window-same" class="selected">same window</span> | <span id="window-new">new window</span> ]
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h1>Radical Software</h1>
+    <p>
+      MCST 294-02 / COMP 194-03, Fall 2026<br/>
+      Rory Solomon <br />
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h2>Project 1, Tutorial 4: Options</h2>
+
+
+
+    <h3 id="table-of-contents">Table of contents</h3>
+
+    <ol class="table-of-contents">
+      <li>
+	<a href="#extension-icon">Providing an extension icon</a>
+      </li>
+      <li>
+	<a href="#extension-options">Adding extension options</a>
+	<ul style="list-style: lower-alpha; text-indent: 0;">
+	  <li>
+	    <a href="#extension-options-ui">The options user interface</a>
+	  </li>
+	  <li>
+	    <a href="#extension-options-store">Saving option values</a>
+	  </li>
+	  <li>
+	    <a href="#chrome-permissions-storage">Specifying Chrome permissions: storage</a>
+	  </li>
+	  <li>
+	    <a href="#extension-options-using">Using option values</a>
+	  </li>
+	</ul>
+      </li>
+      <li>
+	<a href="#ui-improvement">Improving on this user interface: Showing saved values</a>
+      </li>
+      <li>
+	<a href="#concluding-and-lab-notebook">Conclusions & lab notebook entries</a>
+      </li>
+    </ol>
+
+
+    <div class="image">
+      <img src="images/project1-3 - nichelle-nichols-uhura-star-trek.jpg" style="width: 600px; border: solid 1px #000;"/>
+      <em>
+	Today we'll be seeing how you can give the user some options
+	in how your browser extension operates, a kind of control
+	panel. Depicted here is probably one of the most iconic
+	control panels of all time, the workstation of Lieutenant
+	Uhura (portrayed by Nichelle Nichols) from the
+	original <em>Star Trek</em> TV series.
+      </em>
+    </div>
+
+    <h3 id="extension-icon">01. Providing an extension icon</h3>
+
+    <p>
+      Let's first see how to add a custom icon for your
+      extension. This is pretty easy:
+    </p>
+    
+    <pre>
+{
+  "manifest_version": 3,
+  "name": "Rory's First Extension",
+  "description": "This is my first attempt at a browser extension!",
+  "version": "0.1",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*",
+        "file://*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]<span class="new">,</span>
+  <span class="new">"icons": {</span>
+    <span class="new">"128": "images/icon.png"</span>
+  <span class="new">}</span>
+}
+</pre>
+
+    <p>
+      Note the comma that I have to add after the square bracket that
+      ends the <code>content_scripts</code> list. Probably on line 17
+      for you. Let's see what happens if you forget to add that
+      &mdash; what is the error message?
+    </p>
+    <p>
+      Now you would need to put a file
+      named <code class="cli">icon.png</code> inside a subfolder
+      called <code class="cli">images</code> in
+      your <code class="cli">project-1-main</code> folder. You can
+      name the file whatever you'd like, but just make sure that the
+      filename is the same as what you specify
+      in <code class="cli">manifest.json</code>.
+    </p>
+
+    <p>
+      I&apos;ll be using this image which I found online by searching
+      for a logo for Luddism, and which I selected because it has a
+      "logo"-like look and will probably appear legible at small
+      sizes. I have resized this to 128x128 pixels using Preview on
+      Mac. If you find (or make) a different image, make sure that you
+      also resize it to 128x128 pixels using Preview or a similar
+      tool. Ask me if you need help.
+    </p>
+    <div class="image" style="width: 150px;">
+      <img src="images/project1-3 - icon - luddism logo.png" style="width: 150px;" />
+    </div>
+
+    <p>
+      The above code snippet
+      (in <code class="cli">manifest.json</code>) specifies that this
+      image is meant to be 128 pixels wide, and 128 pixels tall. So
+      the <code class="cli">.png</code> file I'm using should have
+      those dimensions.
+    </p>
+
+    <p>
+      The Google Chrome documentation
+      on <a href="https://developer.chrome.com/docs/extensions/reference/manifest/icons">extension
+	icons</a> states:
+      <blockquote>
+	&quot;You should always provide a 128x128 icon; it&apos;s used
+	during installation and by the Chrome Web Store. Extensions
+	should also provide a 48x48 icon, which is used in the
+	extensions management page (chrome://extensions) ... You can
+	also specify a 16x16 icon to be used as the favicon for an
+	extension&apos;s pages.&quot;
+      </blockquote>
+    </p>
+
+    <p>
+      In my experience, I haven&apos;t needed to provide all of
+      these. If you only provide one, the browser will try to
+      automatically re-size, which may or may not look up to your
+      standards. If you want to be thorough, provide these multiple
+      sizes. To do that, add each one to your manifest file, as the
+      <a href="https://developer.chrome.com/docs/extensions/reference/manifest/icons">Chrome
+      documentation</a> explains. Each one should be on its own
+      line. The important thing here is that the <strong>keys</strong>
+      (the things on the left side of the colon <code>:</code>) should
+      match the values shown here. You can name the files whatever you
+      like, as long as you specify those filenames in the manifest. So
+      for example, you could have something like this:
+      <pre class="snippet">
+  ],
+  "icons": {
+    "16": "spaghetti.png",
+    "32": "meatballs.png",
+    "48": "ravioli.png",
+    "128": "linguine.png"
+  }
+}
+</pre>
+      
+    </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="extension-options">02. Adding extension options</h3>
+
+    <p>
+      <strong>Options</strong> give some control &amp; configurability
+      to whoever is using your extension &mdash; whoever has installed
+      it into their browser and is using it. The way you add these
+      options is my creating a simple HTML page with a <strong>web
+      form</strong> that has some input fields, with this the user can
+      specify some values and press a submit button, when that happens
+      your code will <strong>store</strong> those values, and then
+      elsewhere in your extension you will access those values from
+      the extension storage and use them in your code in some way.
+    </p>
+
+    <p>
+      As an example, let&apos;s build on what we&apos;ve done so
+      far. Last week we ended with an example that replaces all
+      instances of one word or phrase with another. My code example
+      replaces &quot;<code>SEARCH</code>&quot; with the text
+      &quot;<code>REPLACE</code>&quot;. In class we experimented with
+      replace "Trump" with "Drumpf", and "ab" with "z", which is what
+      allowed to debug the problem explained
+      in <a href="project1-tutorial3.html#fixing-search-replace">section
+      03.a</a>
+
+      This week, let&apos;s see how
+      we could let the user specify a word or phrase to replace, and a
+      word or phrase to replace it <em>with</em>.
+    </p>
+
+    <h4 id="extension-options-ui">02.a. The options user interface</h4>
+    
+    <p>
+      To get started with <strong>options</strong>, we first have to
+      specify the HTML file that will be displayed when the user
+      clicks "Options" for your extension in the extensions menu. You
+      specify this by adding to <code class="cli">manifest.json</code>:
+    </p>
+    
+      <pre class="snippet">
+	
+  ],
+  <span class="new">"options_page": "options.html",</span>
+  "icons": {
+
+</pre>
+      
+    <p>
+      Note that this snippet is in
+      between <code>content_scripts</code> and <code>icons</code>,
+      probably on line 18 for you. The order of fields
+      in <code class="cli">manifest.json</code> is actually not super
+      important, but you&apos;ll probably want to keep yours the same or
+      similar to my examples to make sure you have the syntax correct.
+    </p>
+
+    <p>
+      Now let&apos;s create that file! Make a new file in VS Code, save it,
+      and make sure you name it <code class="cli">options.html</code>
+      and save it into your <code class="cli">project-1-main</code>
+      folder. Let&apos;s add this code to the file:
+    </p>
+
+    <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;div&gt;
+      From text: &lt;input id="fromField" type="text" /&gt;
+      To text: &lt;input id="toField" type="text" /&gt;
+      &lt;button type="button" id="setButton"&gt;Set text&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+    <p>
+      The <code>input</code> tags are inputs into which the user can
+      specify values. If you were really using this in your project,
+      you should probably specify some additional helper text to the
+      explain to the user what is going on. You could do that with
+      some plain text included in a <code>&lt;p&gt; &lt;p&gt;</code>
+      tag above or below the <code>&lt;input&gt;</code> fields.
+    </p>
+
+    <p>
+      <code>From text:</code> is what will be displayed to the user,
+      and <code>fromField</code> is the name we will use to identify
+      this HTML field element elsewhere in our code.
+    </p>
+
+    <h4 id="extension-options-store">02.b. Saving option values</h4>
+
+    <p>
+      Now we need to create the Javascript code that will handle
+      saving these values when the user clicks the <code>Set
+      text</code> button. Add this to the top of
+      your <code class="cli">options.html</code> file.
+    </p>
+    
+    <pre class="snippet">
+&lt;html&gt;
+  <span class="new">&lt;head&gt;</span>
+    <span class="new">&lt;script src="options.js" defer&gt;&lt;/script&gt;</span>
+  <span class="new">&lt;/head&gt;</span>
+  &lt;body&gt;
+</pre>
+
+    <p>
+      The <code>defer</code> keyword means that the browser will wait
+      until the page has fully loaded before running the Javascript
+      code in that file. This will prevent errors in which the
+      Javascript is run <em>before</em> the page is fully rendered,
+      which would cause some errors with
+      <code>getElementById()</code> commands below.
+    </p>
+    <p>
+      Now we have to add that Javascript file and add the code there
+      that will implement allowing the user to save values. Create a
+      new file in VS Code, save it as
+      <code class="cli">options.js</code> and add in this code:
+    </p>
+
+    <pre>
+let fromTextElement = document.getElementById('fromField');
+let toTextElement = document.getElementById('toField');
+let setButtonElement = document.getElementById('setButton');
+
+setButtonElement.addEventListener('click', function() {
+  chrome.storage.sync.set({
+    fromStored: fromTextElement.value,
+    toStored: toTextElement.value});
+  });
+</pre>
+
+    <p>
+      The three <code>...Element</code> variables are the various HTML
+      elements in the <strong>DOM</strong>
+      (the <strong>document</strong>) that we want to access from our
+      Javascript code.
+    </p>
+
+    <p>
+      The next chunk of code <strong>listens</strong> for when
+      the <code>setButtonElement</code> receives a <code>click</code>
+      event. When that happens, we get the <strong>value</strong> of
+      each field (e.g., <code>fromTextElement.value</code>) and put
+      that into a <strong>dictionary</strong>. Remember that a
+      <strong>dictionary</strong> is a group
+      of <strong>key-value</strong> pairs specified by <strong>curly
+      braces</strong> <code>{ }</code>.
+    </p>
+
+    <p>
+      What the above code does is save (or <strong>store</strong>) the
+      values that the user specifies into this thing
+      called <code>chrome.storage</code>, when the user clicks
+      the <code>Set text</code> button.
+    </p>
+    <p>
+      We have not yet implemented any code to actually <em>use</em>
+      these values, but even before we do that, we should be able to
+      test this first part of the functionality. Save all your files,
+      reload your extension (step 1 below), and from the Chrome
+      extension menu (step 2), click the three dots (step 3), and
+      click "Options" for your extension (step 4). Like so:
+    </p>
+    <div class="image" style="width: 800px;">
+      <a href="images/project1-3 - reload click options.png">
+	<img src="images/project1-3 - reload click options.png" style="width: 800px;" />
+      </a>
+      <em>(Click to enlarge.)</em>
+    </div>
+
+    
+    <p>
+      But wait &mdash; if you try to run the above code, it gives an
+      error on the extension manager page (chrome://extensions/).
+      Another way of seeing this error is to control click (or right
+      click) anywhere within the options page that you have just
+      created (step 1 below), select "Inspect" (step 2), and then
+      select "Console" (step 3). Then enter some values on your option
+      page and click the <code>Set text</code> button. You should now
+      see an error that says something to the effect of &quot;Cannot
+      read properties of ... sync&quot;.
+    </p>
+
+    <div class="image">
+      <a href="images/project1-3 - options error.png">
+	<img src="images/project1-3 - options error.png" />
+      </a>
+      <em>(Click to enlarge.)</em>
+    </div>
+
+    <p>
+      If you click on <code class="cli">options.js</code> in that
+      window (step 4 above), it should take you to a screen that shows you
+      your <code class="cli">options.js</code> code within the
+      "Inspect" tool, with a red error indicator on the line that
+      includes <code>chrome.storage.sync.set</code>.
+    </p>
+    <p>
+      <strong>What is the causing this error?</strong> The issue here
+      is that <code>chrome.storage</code> is <code>undefined</code>
+      because we have not yet told Chrome that we are trying to use
+      the storage functionality within the Extension platform. Let's
+      see how to fix that in the next section ...
+    </p>
+
+
+
+
+
+    
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="chrome-permissions-storage">02.c. Specifying Chrome permissions: storage</h4>
+
+    <p>
+      Just about every new type of functionality that you want your
+      extension to use has to be declared. This is what Chrome uses to
+      advertise to users what your extension will be doing. This is
+      intended as a security feature, to inform potential users about
+      which parts of your data the extension will able to access, to
+      allow them to determine whether they trust you and your code
+      with that level of access.
+    </p>
+
+    <div class="image">
+      <a href="images/project1-3 - install permissions.png">
+	<img src="images/project1-3 - install permissions.png" />
+      </a>
+      <em>Declaring permissions allows the Chrome store to display an
+	informative popup, when a user clicks "Add to Chrome", that
+	explains what kinds of data your extension will be able to
+	access. (Click to enlarge.)</em>
+    </div>
+
+    <p>
+      In this case, we will need to declare that <code>storage</code>
+      permission. We do that by adding some lines
+      to <code class="cli">manifest.json</code>, like this:
+    </p>
+
+    <pre class="snippet">
+  "icons": {
+    "128": "images/icon.png"
+  }<span class="new">,</span>
+  <span class="new">"permissions": [</span>
+    <span class="new">"storage"</span>
+  <span class="new">]</span>
+}
+</pre>
+    
+    <p>
+      The Chrome
+      documentation <a href="https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions">explains
+      permissions here</a>, and a you can read
+      a <a href="https://developer.chrome.com/docs/extensions/reference/permissions-list">list
+      of possible values for this field here</a>.      
+    </p>
+
+    <blockquote>
+      <strong>For your lab notebook:</strong> Sometimes this approach
+      to privacy and data gathering is known as <strong>informed
+      consent</strong>: informing a user about what types of data will
+      be collected from them, and give them the opportunity to consent
+      to it, or not. Add some comments about informed consent, the
+      Chrome <code>permissions</code> field, and some pros and cons of
+      this method of addressing privacy and security.
+    </blockquote>
+    
+    <p>
+      After adding those lines, save the file, reload your extension,
+      and you should be able to open the options page and click
+      the <code>Set text</code> button without seeing any error.
+    </p>
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="extension-options-using">02.d. Using option values</h4>
+
+    <p>
+      Now we have to use those values somewhere in our code. We will
+      do this in our <strong>content script</strong>. Let&apos;s make a new
+      one for this tutorial.
+    </p>
+
+    <p>
+      Create another new file, let&apos;s call
+      it <code class="cli">content-tutorial4-02.js</code>, and save it to
+      your <code class="cli">project-1-main</code> folder. (Remember to
+      make sure to be careful and precise about capitalization,
+      punctuation, and spaces!)
+    </p>
+
+    <p>
+      Modify <code class="cli">manifest.json</code> to use this
+      new <strong>content script</strong>:
+    </p>
+
+    <pre class="snippet">
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*",
+        "file://*"
+      ],
+      "js": [
+        <span class="changed">"content-tutorial4-02.js"</span>
+      ],
+      "run_at": "document_end"
+    }
+  ],
+</pre>
+
+    <p>
+      To do this, let's build on the search-and-replace work we did in
+      <a href="project1-tutorial3.html#technique-search-replace">part
+      3 of Tutorial 3</a>. But we&apos;ll modify it to use user-specified
+      options.
+    </p>
+    <p>
+      Now modify <code class="cli">content-tutorial4-02.js</code> to look
+      like this:
+    </p>
+
+    <pre>
+<span class="new">// Technique 3</span>
+<span class="new">chrome.storage.sync.get({fromStored: "", toStored: ""}, function(result) {</span>
+  var html = document.querySelector('html');
+  var walker = document.createTreeWalker(html, NodeFilter.SHOW_TEXT);
+  var node;
+  while (node = walker.nextNode()) {
+    node.nodeValue = node.nodeValue.replace(/the /gi, 'WHAT');
+  }
+<span class="new">});</span>
+</pre>
+
+    <p>
+      That is using the same code from last week, but places inside
+      this new <strong>block</strong> (a chunk of code between two
+      cruly braces <code>{ }</code>) that <code>get()</code>s these
+      values from the <code>chrome.storage</code> so that we can use
+      them. But we&apos;re not using them yet. 
+    </p>
+    <p>
+      To actually use the values, make this change:
+    </p>
+    
+    <pre class="snippet">
+  while (node = walker.nextNode()) {
+    <span class="new">var fromText = result.fromStored</span>
+    <span class="new">var toText = result.toStored</span>
+
+    <span class="new">var re = new RegExp(fromText,"gi")</span>
+    node.nodeValue = node.nodeValue.replace(<span class="changed">re, toText</span>);
+  }
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="ui-improvement">03. Improving on this user interface: Showing saved values</h3>
+
+    <p>
+      One remaining issue here is that if the user returns to their
+      options page, they will not be able to see any values that they
+      may have saved. Let's improve on that now.
+    </p>
+    
+    <p>
+      Let's modify our extension so that when the user opens the
+      options page, we will show them what the previously saved values
+      are.
+    </p>
+    <p>
+      Add this snippet to the end of <code class="cli">options.js</code>:
+    </p>
+
+    <pre>
+chrome.storage.sync.get({fromStored: "", toStored: ""}, function(result) {
+    fromTextElement.value = result.fromStored;
+    toTextElement.value = result.toStored;
+});
+</pre>
+
+    <p>
+      Now when you open the options page, you should see any values
+      you may have previously saved.
+    </p>
+
+    <p>
+      But now we have the problem that the user can only change the
+      values but not ever delete them. Let's add a clear button to
+      clear the values. In <code class="cli">options.html</code>:
+    </p>
+    
+    <pre class="snippet">
+    &lt;div&gt;
+      From text: &lt;input id="fromField" type="text" /&gt;
+      To text: &lt;input id="toField" type="text" /&gt;
+      &lt;button type="button" id="setButton"&gt;Set text&lt;/button&gt;
+      <span class="new">&lt;button type="button" id="clearButton"&gt;Clear text&lt;/button&gt;</span>
+    &lt;/div>
+</pre>
+
+    <p>
+      And now we need to add Javascript code to respond when the user
+      clicks on that button. Add the below to code
+      to <code class="cli">options.js</code>
+    </p>
+
+    <p>
+      This line should go up top:
+    </p>
+    <pre class="snippet">
+let toTextElement = document.getElementById('toField');
+let setButtonElement = document.getElementById('setButton');
+<span class="new">let clearButton = document.getElementById('clearButton');</span>
+
+</pre>
+
+    <p>
+      And this should go at the end:
+    </p>
+
+<pre class="snippet">
+
+chrome.storage.sync.get({fromStored: "", toStored: ""}, function(result) {
+    fromTextElement.value = result.fromStored;
+    toTextElement.value = result.toStored;
+});
+
+<span class="new">clearButton.addEventListener('click', function() {</span>
+  <span class="new">chrome.storage.sync.clear();</span>
+  <span class="new">fromTextElement.value = "";</span>
+  <span class="new">toTextElement.value = "";</span>
+<span class="new">});</span>
+
+</pre>
+
+
+
+<span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+<h3 id="concluding-and-lab-notebook">04. Conclusions & lab notebook entries</h3>
+
+    <p>
+      To go further with this, and for your lab notebook, experiment
+      with modifying the above so the user can specify a color and you
+      use that color somehow in your extension. For example you could
+      use it set a border or font color using techniques from
+      tutorials 1 and 2.
+    </p>
+    <p>
+      Offer some comments on this experimentation. Share some thoughts
+      about what other functionality you might try to build using
+      these user option techniques.
+    </p>
+    
+
+    
+    <div class="horizontal-rule"></div>
+    <script type="text/JavaScript">
+      datUpdated = new Date(document.lastModified) ;
+      document.write("Last Updated: " + datUpdated);
+    </script>
+
+    </div>
+
+</body>
+
+</html>
+
